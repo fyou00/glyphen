@@ -4,6 +4,18 @@ Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri t
 
 ## [Unreleased] - 2026-11-19
 
+### Tahap 5: evaluasi teknis awal
+- `scripts/evaluate_segmentation.py`: tambahkan enam lembar audit sumber/crop, template anotasi per kotak, hash bukti berkas, perhitungan ketepatan hanya atas anotasi eksplisit, dan metrik status/kotak kosong setiap label. Gunakan geometri dan inset dari ekstraktor.
+- `scripts/evaluate_render.py`: tambahkan `--repeat` positif untuk beban padat; default tetap teks standar satu kali. Simpan jumlah pengulangan dalam ringkasan baru.
+- `tests/test_evaluation.py`: tiga metode uji untuk anotasi kosong/parsial, manifest/sumber/glyph yang berubah, anotasi duplikat, dan pemeriksa yang belum diisi. Seluruh 14 pengujian audit serta renderer lulus.
+- Artefak lokal `outputs/stage5/`: simpan enam lembar audit awal dan hasil evaluator, 323 anotasi visual agent, ringkasan segmentasi, 10 render standar, 10 render padat/multihalaman, render 73 karakter template, pratinjau, dan laporan gabungan. Seluruhnya tetap diabaikan Git.
+- Bahan uji manusia lokal: siapkan inventaris 20 pasangan belum terisi, CSV 200 baris penilaian kosong, dan petunjuk persiapan. Tidak ada skor atau referensi independen buatan; protokol persepsi menunggu keputusan pemilik.
+- `EVALUATION.md`: tambahkan Uji 4 dengan ketepatan visual agent 323/323 pada set scan ini, kecepatan 0,81120 dan 1,16362 detik/halaman, 0 kotak bertumpuk, variasi lebar, watermark seluruh 41 halaman, serta target slash dan uji persepsi/foto/cetak yang belum terpenuhi. Perjelas keterbatasan tes tebak jika watermark terlihat.
+- `DECISIONS.md`: tambahkan D-020 untuk aturan anotasi, keterlacakan bukti, pengukuran beban padat, dan pemisahan audit agent dari persepsi manusia.
+- `README.md`: dokumentasikan audit, anotasi, pengulangan teks untuk beban padat, definisi durasi per halaman, dan status evaluasi teknis.
+- `RENDER.md`: tambahkan rujukan evaluasi Tahap 5. Tidak ada perubahan engine, geometri, atau parameter.
+- `CHANGELOG.md`: catat seluruh perubahan dan batas kesimpulan evaluasi; kode dan dokumen yang diverifikasi dibuatkan commit.
+
 ### Tahap 4: engine render dan verifikasi awal
 - `render_document.py`: tambahkan API/CLI render catatan dan surat, validasi persetujuan/tinjauan/coverage/file, isolasi glyph pengguna, mask tinta dan metrik baseline, pemilihan varian dengan seed, jitter, word wrap termasuk kata panjang, baris kosong, dan pagination.
 - `render_document.py`: tambahkan PDF A4, PNG 300 DPI, watermark wajib setiap halaman, placeholder karakter hilang, garis panduan opsional, laporan JSON tanpa isi teks, format tunggal, dan penolakan folder keluaran lama. Undangan tetap ditunda.

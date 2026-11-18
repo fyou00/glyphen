@@ -351,3 +351,22 @@ Pilih varian dan jitter sekali sebelum word wrap. Lebar token memakai gambar set
 - Tinggi baris bisa melebihi 2,4 × x-height untuk teks yang memerlukan envelope lebih tinggi. Nilai awal lainnya tetap dan diuji sebelum perubahan lebih lanjut.
 - Catatan bermargin 20 mm, surat 25 mm; undangan ditolak sesuai D-011. Karakter hilang menjadi placeholder dan daftar pada laporan, tanpa dibuang.
 - Parameter yang dipakai dan hasil 10 seed dicatat pada Uji 3 di `EVALUATION.md`; kemiripan persepsi belum dinyatakan tercapai.
+
+---
+
+## D-020: Evaluasi segmentasi memakai anotasi eksplisit dan bukti berkas
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif
+
+**Keputusan**
+Audit segmentasi memakai perbandingan visual kotak sumber dengan crop, anotasi true/false/null per label/varian, identitas pemeriksa, serta hash manifest, sumber scan, dan glyph. Status ok/touches_edge tidak otomatis menjadi anotasi benar. Tanpa anotasi, ketepatan pemotongan null; anotasi parsial dilaporkan dengan denominator jumlah yang benar-benar diperiksa, dan tidak dianggap lengkap. Audit agent dipisahkan dari penilaian manusia independen.
+
+**Alasan**
+- Mengubah hasil tinjauan menjadi angka harus dapat ditelusuri dan tidak boleh menganggap semua kotak benar hanya dari status algoritme.
+- Metrik dari scan/glyph lama tidak berlaku setelah berkas berubah.
+
+**Konsekuensi**
+- Tambahkan evaluator segmentasi dan uji penolakan anotasi tidak valid; bukti pribadi tetap lokal dan diabaikan Git.
+- Uji performa tetap 10 seed teks standar, ditambah opsi pengulangan untuk beban padat/multihalaman tanpa mengganti teks standar asli. Durasi per halaman adalah durasi dokumen dibagi jumlah halaman; bukan waktu tiap halaman secara terpisah.
+- Tidak mengubah parameter segmentasi/render atau geometri. Uji persepsi belum dijalankan: tidak membuat skor manusia atau menggandakan dua baris pangram menjadi 20 referensi independen. Watermark tetap wajib; pilihan protokol penilaian yang sesuai masih memerlukan keputusan pemilik project.

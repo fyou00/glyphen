@@ -17,10 +17,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--user', required=True)
     parser.add_argument('--out', type=Path, default=Path('outputs/evaluation'))
+    parser.add_argument('--repeat', type=int, default=1,
+                        help='Ulang teks standar untuk uji halaman padat; default 1 tidak mengubah teks.')
     args = parser.parse_args()
     project = Path(__file__).resolve().parents[1]
     evaluation = (project/'EVALUATION.md').read_text(encoding='utf-8').split('## 5.')[1]
     text = re.search(r'```\n(.*?)\n```', evaluation, re.S).group(1)
+    if args.repeat < 1:
+        parser.error('--repeat harus positif')
+    text = '\n\n'.join([text]*args.repeat)
     bank = GlyphBank(args.user, project/'glyph_bank')
     results, overlaps, widths = [], 0, {}
     for seed in range(10):
@@ -37,6 +42,7 @@ def main():
                                     and a.y < b.y+b.image.height and b.y < a.y+a.image.height)
     seconds = [r['elapsed_seconds']/r['pages'] for r in results]
     summary = {'runs': 10, 'python': platform.python_version(), 'platform': platform.system(),
+               'text_repetitions': args.repeat,
                'machine': platform.machine(), 'mean_seconds_per_page': statistics.mean(seconds),
                'min_seconds_per_page': min(seconds), 'max_seconds_per_page': max(seconds),
                'missing_characters': sorted({c for r in results for c in r['missing_characters']}),

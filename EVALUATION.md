@@ -46,6 +46,8 @@ Target awal: penilai menebak dengan benar pada 50% sampai 65% kasus. Angka di ba
 
 Catatan: target ini bisa berbeda untuk tujuan lain. Untuk dokumen yang tampak ditulis tangan, ini tetap tujuan utama.
 
+Kewajiban watermark tetap berlaku selama evaluasi. Watermark yang terlihat dapat membocorkan panel hasil render, sehingga uji tebak tidak boleh dilaporkan sebagai uji buta dalam kondisi itu. Protokol persepsi perlu ditetapkan sebelum mengambil skor; usulan penilaian terbuka kemiripan/keterbacaan 1–5 menunggu keputusan pemilik project. Persentase tebakan di bawah 50% saja juga bukan bukti bahwa tulisan tidak dapat dibedakan; jumlah sampel dan bias penilaian harus diperhitungkan.
+
 ## 3. Protokol uji
 
 ### 3.1 Uji ekstraksi
@@ -147,6 +149,34 @@ Isi bagian ini setiap kali ada uji. Jangan menghapus entri lama.
 - Tinggi baris contoh diary 7,358 mm mengikuti batas envelope D-019. Nilai dasar rotasi ±3°, offset ±0,4 mm, baseline ±0,3 mm, skala ±5%, pengali tinggi 2,4, jarak 0,15, dan spasi kata 2,5 tetap dipertahankan; belum dikalibrasi melalui uji persepsi.
 - Hasil pribadi dan statistik rinci tetap lokal di `outputs/` yang diabaikan Git, termasuk `demo/`, `cli-check/`, dan `evaluation/summary.json`. CLI dengan file UTF-8 juga diuji untuk catatan dengan garis panduan.
 - Keputusan terkait: D-018 dan D-019. Tahap engine render awal selesai; uji persepsi, hasil cetak, ketahanan bank lain, dan karakter di luar template masih memerlukan evaluasi lanjutan.
+
+### Uji 4: evaluasi teknis Tahap 5, 2026-11-19
+- Bank yang diuji: hasil scan pada Uji 2, dengan persetujuan pemilik yang sama; satu pemilik dan satu set scan. Algoritme segmentasi, geometri, jitter, dan aturan render tidak diubah.
+- Audit enam lembar kotak sumber versus crop mencakup seluruh 323 kotak, termasuk semua varian bertanda tepi. Anotasi eksplisit per label/varian dibuat setelah pemeriksaan visual oleh agent (`codex_visual_agent`), bukan oleh penilai manusia independen. Hash manifest, tiga scan sumber, dan setiap glyph disimpan bersama anotasi agar hasil tidak dipakai untuk data yang berbeda.
+- Pemeriksaan visual: 323/323 benar pada set ini, ketepatan pemotongan 100%; tidak tampak tinta terpotong, garis kotak hitam ikut masuk, atau dua kotak tergabung. Empat varian tepi tetap utuh dan statusnya tidak dihapus. Angka ini terbatas pada tinjauan visual agent terhadap scan ini; belum merupakan ukuran ketahanan pada populasi pengguna/foto lain.
+- Status tetap 319 ok (98,76%), 0 empty (0%), 4 touches_edge (1,24%). Jumlah kosong setiap label 0. Coverage tetap 52/52 huruf dengan 5 varian dan 21 label angka/tanda baca dengan 3 varian.
+- Uji render tambahan seluruh karakter template: 73 instance (a–z, A–Z, angka, dan 11 tanda baca), tanpa karakter hilang. Pratinjau ditinjau visual, termasuk kapital, angka, dan tanda baca.
+
+| Metrik | Standar: 10 seed | Padat: 10 seed, teks diulang 8 kali |
+|---|---:|---:|
+| Jumlah halaman | 10 | 30 |
+| Rata-rata detik/halaman | 0,81120 | 1,16362 |
+| Rentang detik/halaman antar-run | 0,5815–1,0615 | 1,06077–1,26057 |
+| Pasangan kotak glyph bertumpuk | 0 | 0 |
+| Label terpakai dengan simpangan baku lebar instance >0 | 33/33 | 33/33 |
+| Rentang simpangan baku lebar instance (piksel sumber) | 1,044–7,593 | 1,183–8,254 |
+| Label bank dengan simpangan baku lebar varian >0 | 73/73 | 73/73 |
+| Karakter hilang | `/` | `/` |
+
+- Waktu adalah durasi penuh satu pemanggilan render (muat bank, layout, PDF, PNG) dibagi jumlah halaman, sebelum penulisan JSON laporan. Rentang di atas adalah rentang rata-rata per halaman antar-run, bukan waktu terpisah tiap halaman. Lingkungan tetap Python 3.13.18/macOS x86_64, tanpa GPU. Hasil 30 halaman mencakup halaman terakhir yang tidak penuh.
+- Target rata-rata <2 detik/halaman tercapai pada kedua beban ini. Target variasi lebar dan 0 tumpang tindih kotak juga tercapai pada data ini. Ini bukan klaim bahwa seluruh target kualitas tulisan sudah tercapai.
+- Target karakter hilang 0 pada teks standar tetap belum tercapai: slash tidak ada dalam template. Semua kemunculannya tetap placeholder dan dilaporkan; tidak membuat atau menggandakan glyph untuk menutup kekurangan.
+- Pemeriksaan berkas: 21 PDF / 41 halaman A4 dan 41 PNG RGB 300 DPI; watermark teks diverifikasi pada setiap halaman PDF dengan PDFKit dan keberadaan tinta footer pada setiap PNG. Pratinjau tiga halaman beban padat seed 0 ditinjau visual; watermark tetap terlihat pada halaman lanjutan.
+- Pengujian otomatis: 14 metode lulus (11 renderer, 3 metrik audit). Metrik tanpa anotasi tetap null; anotasi parsial tidak dianggap lengkap; manifest/sumber/glyph berbeda, anotasi duplikat, dan pemeriksa kosong ditolak.
+- Artefak lokal: `outputs/stage5/summary.json`, `segmentation_final/` beserta anotasi dan enam lembar audit, `standard/`, `dense/`, serta `all_characters/`. Seluruh artefak pribadi diabaikan Git.
+- Uji manusia belum dijalankan: 0 penilai, 0 skor, dan belum ada 20 pasangan referensi halaman independen. Dua baris satu pangram pada TPL-03 tidak digandakan agar seolah-olah menjadi 20 sampel. `human-study/` hanya berisi inventaris 20 pasangan yang belum terisi, CSV 200 baris kosong untuk 10 ID penilai anonim, dan petunjuk persiapan; protokol watermark/persepsi masih menunggu keputusan.
+- Batas lain: belum diuji dengan foto HP cahaya redup/miring, pengguna lain, atau hasil cetak. Tidak ada hasil persepsi atau ketahanan fisik yang direkayasa. Evaluasi teknis awal selesai dan tercatat; evaluasi persepsi serta seluruh target produk belum selesai.
+- Keputusan terkait: D-020.
 
 <!--
 Template entri:

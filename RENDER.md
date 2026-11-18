@@ -2,7 +2,7 @@
 
 Dokumen ini menjelaskan cara engine render mengubah teks menjadi dokumen tulisan tangan dari glyph bank pengguna. Pembacaan glyph mengikuti `PIPELINE.md`, dan jenis dokumen mengikuti `SPEC.md` bagian 6 dan 7.
 
-Status: engine awal diimplementasikan di `render_document.py` dan diuji pada glyph nyata; parameter masih perlu validasi persepsi. Lihat Uji 3 di `EVALUATION.md`.
+Status: engine awal diimplementasikan di `render_document.py` dan diuji pada glyph nyata; parameter masih perlu validasi persepsi. Lihat Uji 3 dan evaluasi teknis Tahap 5 pada Uji 4 di `EVALUATION.md`.
 
 ## Masukan
 

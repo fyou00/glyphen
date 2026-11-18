@@ -29,6 +29,7 @@ Sistem yang membuat dokumen (catatan, surat, undangan) dengan tulisan tangan dar
 | `extract_glyphs.py` | Mengekstrak glyph dari foto template |
 | `render_document.py` | Merender teks menjadi PDF/PNG tidak resmi |
 | `scripts/evaluate_render.py` | Mengukur 10 render teks standar |
+| `scripts/evaluate_segmentation.py` | Audit sumber/crop, anotasi per kotak, dan metrik segmentasi |
 | `requirements.txt` | Dependensi Python |
 
 ## Persiapan
@@ -81,6 +82,17 @@ python scripts/evaluate_render.py --user <id> --out outputs/evaluasi-01
 ```
 
 Pengujian otomatis memakai bank buatan sementara. Evaluasi memakai bank pengguna yang telah ditinjau dan menghasilkan 10 pasangan PDF/PNG serta `summary.json` lokal. Lihat `EVALUATION.md` untuk hasil dan batas pengujian.
+
+Untuk mengaudit pemotongan dan menguji dokumen yang lebih padat:
+
+```bash
+python scripts/evaluate_segmentation.py --user <id> --out outputs/audit-01
+python scripts/evaluate_render.py --user <id> --out outputs/evaluasi-padat-01 --repeat 8
+```
+
+Audit menghasilkan enam lembar perbandingan kotak sumber dengan crop dan `review_template.json`. Periksa setiap kotak, isi `correct` dengan `true`/`false`, catat `reviewer` dan alasan, lalu simpan anotasi terpisah. Hitung metrik dengan `--review outputs/anotasi.json --out outputs/audit-02`. Anotasi kosong tidak dinilai lulus; perubahan hash manifest, scan, atau glyph membatalkan anotasi lama. Audit ini menggunakan pemetaan sumber dalam `consent.json` dan folder `scan_demo/` secara default.
+
+`--repeat 8` mengulang teks standar delapan kali; default tetap satu teks standar asli. Waktu per halaman merupakan durasi render satu dokumen dibagi jumlah halamannya, bukan pengukuran terpisah setiap halaman. Tahap 5 sudah memiliki evaluasi teknis awal; uji persepsi manusia dan kondisi foto lain masih belum selesai.
 
 ## Yang belum ada
 
