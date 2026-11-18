@@ -1,0 +1,5 @@
+glyph_bank/
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
