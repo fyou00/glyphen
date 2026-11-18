@@ -403,3 +403,23 @@ Sesuai permintaan pemilik, hapus teks cetak abu-abu `The quick brown fox jumps o
 
 **Konsekuensi**
 - Buat ulang PDF template dan selaraskan dokumentasi pengisian. Tidak ada perubahan geometri, ekstraksi glyph, atau engine render; template yang sudah diisi tetap dapat diproses.
+
+---
+
+## D-023: Antarmuka editor lokal dengan FastAPI
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif
+
+**Keputusan**
+Bangun antarmuka HTML/CSS/JavaScript lokal dengan FastAPI dan Uvicorn, menghubungkan editor teks, jenis catatan/surat, opsi seed/panduan, pratinjau halaman, dan unduhan PDF/PNG ke engine yang sudah ada. Server default hanya mendengarkan 127.0.0.1 dan memakai satu ID pemilik yang ditentukan saat dijalankan. Tidak menambahkan upload sampel atau publikasi website pada tahap ini.
+
+**Alasan**
+- Engine selesai dan pengguna meminta antarmuka untuk memakainya. Halaman khusus memberi ruang editor serta pratinjau A4 tanpa pengiriman data ke layanan lain.
+
+**Konsekuensi**
+- Tambahkan FastAPI dan Uvicorn ke dependensi runtime; httpx hanya untuk pengujian HTTP lokal melalui `requirements-dev.txt`. Pydantic, Starlette, dan dependensi transitif mengikuti FastAPI. Tidak memakai ML atau layanan eksternal.
+- Validasi persetujuan, tinjauan, dan coverage tetap dilakukan engine. Teks tidak disimpan oleh antarmuka atau dicatat ke log; hasil disimpan di `outputs/ui/` dengan ID acak per render dan tidak di-commit. Tidak ada autosave teks di browser.
+- Render JSON dibatasi 12.000 karakter dan dijalankan bergantian. Unduhan hanya boleh mengakses file hasil yang terdaftar pada render tersebut, tanpa menerima path berkas bebas. Origin/Host lokal diverifikasi dan cache respons pribadi dinonaktifkan.
+- Halaman memakai aset lokal, label Bahasa Indonesia, navigasi keyboard, indikator proses, pesan karakter hilang, dan penanda saat hasil perlu diperbarui setelah teks berubah. Watermark wajib tetap ada; tidak ada opsi menghapusnya.
+- Aturan render dan geometri template tidak berubah. Teks awal adalah contoh catatan netral yang bisa diganti atau dikosongkan; pratinjau awal dirender lokal melalui API yang sama.

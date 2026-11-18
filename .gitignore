@@ -1,6 +1,7 @@
 glyph_bank/
 scan_demo/
 outputs/
+.taste-skill/
 __pycache__/
 *.py[cod]
 .venv/

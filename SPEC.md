@@ -91,11 +91,13 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 | Surat | 25 mm | Kop surat berupa teks biasa |
 | Undangan | 30 mm | Ditunda (D-011); rancangan teks di tengah halaman |
 
-## 8. Antarmuka (tahap berikutnya)
+## 8. Antarmuka lokal
 
-- Form sederhana (Streamlit atau FastAPI) untuk mengisi teks dan memilih jenis dokumen.
-- Unduh PDF atau PNG.
-- Tidak termasuk dalam tahap awal.
+- FastAPI dengan editor HTML/CSS/JavaScript lokal, setelah engine render selesai (D-023).
+- Teks maksimal 12.000 karakter, jenis catatan/surat, opsi seed dan garis panduan.
+- Pratinjau A4 per halaman dengan pembesaran; unduh PDF seluruh dokumen atau PNG halaman aktif.
+- ID pemilik dipilih saat menjalankan server; hanya glyph bank yang telah memiliki persetujuan, coverage, serta tinjauan valid yang boleh dipakai.
+- Teks tidak disimpan otomatis di browser atau dicatat ke log; hasil disimpan lokal di folder yang diabaikan Git. Tidak ada upload sampel melalui UI ini atau deployment publik.
 
 ## 9. Batasan dan keamanan
 

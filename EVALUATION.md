@@ -185,6 +185,17 @@ Isi bagian ini setiap kali ada uji. Jangan menghapus entri lama.
 - Seluruh 14 pengujian otomatis lulus, termasuk margin, pagination, tumpang tindih, determinisme seed, dan watermark multipage.
 - Hasil lokal disimpan di `outputs/spacing-03/`, termasuk gambar perbandingan berwatermark. Riwayat evaluasi parameter lama tetap dipertahankan.
 
+### Uji 5: antarmuka lokal, 2026-11-19
+- Implementasikan editor/pratinjau FastAPI setelah engine selesai, sesuai D-023. Tidak ada perubahan aturan render, bank, atau geometri template.
+- Seluruh 19 metode unittest lulus: 11 engine, 3 audit, 5 API. Bank uji API dibuat sementara; uji mencakup kesiapan profil, bank tanpa persetujuan, input kosong/terlalu panjang/jenis atau seed tidak valid, Origin/Host asing, penolakan akses laporan/berkas bebas, render multipage, unduhan PDF/PNG, isolasi hasil, dan tidak menyimpan isi teks dalam laporan.
+- Pemeriksaan sintaks Python/JavaScript dan `pip check` lulus. Starlette versi lingkungan ini memberi peringatan deprecation tentang httpx pada TestClient; pengujian HTTP tetap lulus. httpx hanya dipakai saat pengujian.
+- Uji browser headless Chrome lokal dengan engine dan profil yang sebenarnya: pratinjau awal, ubah teks, pilihan surat, seed, render 3 halaman, peringatan @/#, navigasi maju/mundur, pembesaran, unduh PDF/PNG, kosongkan teks, penonaktifan unduhan hasil usang, simulasi kegagalan HTTP dan pemulihan, serta Ctrl+Enter semuanya berhasil.
+- Pratinjau diperiksa pada lebar 1440, 1024, 820, 768, 390, dan 320 piksel, tanpa overflow horizontal terdeteksi. Dua panel bertumpuk di ponsel. Tombol utama pada viewport 390 × 844 berada sampai y=830 setelah perbaikan containing block animasi; animasi kini hanya pada judul. Pada layar desktop pendek, sebagian editor dapat memerlukan scroll.
+- Pemeriksaan performa browser: 0 FAIL, 5 WARN; transfer sekitar 353 KiB desktop/346 KiB ponsel, tidak ada request rusak, layout shift 0. FCP relatif pada mesin uji sekitar 456 ms desktop dan 384 ms ponsel; ini waktu cat pertama, bukan waktu selesai render dokumen. Warning terkait atribut dimensi gambar, gambar belum lazy di ponsel, dan PNG 300 DPI yang lebih besar dari ukuran tampil.
+- Gate desain: `GATE: OPEN 15 (rounds used up)` dengan lima waiver dan 12 warning, bukan PASS. Temuan terbuka terutama aturan hero satu layar, container/heading tepi luar, serta unduhan di fold pertama yang dirancang untuk landing page. Editor dua panel dan unduhan setelah pratinjau pada ponsel tetap dipertahankan. Daftar aturan, waiver, warning, dan alasannya ada di `docs/INTERFACE.md`.
+- Berkas, log, dan screenshot QA berada lokal di `outputs/ui-checks/`; hasil dokumen di `outputs/ui/`. Keduanya diabaikan Git. Tidak ada sampel atau teks yang diunggah ke layanan lain, tidak ada publikasi situs, dan belum dilakukan pengujian perangkat ponsel fisik atau penilaian manusia.
+- Batas aplikasi: satu pemilik pada loopback, belum memiliki upload/onboarding sampel, autentikasi multi-pengguna, atau penyimpanan draft. Ini tidak menyelesaikan uji persepsi yang tertunda pada tahap sebelumnya.
+
 <!--
 Template entri:
 

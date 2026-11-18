@@ -4,6 +4,19 @@ Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri t
 
 ## [Unreleased] - 2026-11-19
 
+### Antarmuka editor lokal (D-023)
+- `app.py`: tambahkan server FastAPI pada loopback, profil pemilik tetap, validasi input hingga 12.000 karakter, antrean render, dan rute unduhan yang hanya melayani berkas hasil terdaftar. Host/Origin diverifikasi; respons pribadi tidak di-cache, sumber halaman dibatasi CSP, dan log akses tidak diaktifkan.
+- `web/index.html`, `web/styles.css`, `web/app.js`, `web/favicon.svg`: buat ruang kerja editor/pratinjau A4, profil siap pakai, pilihan catatan/surat, teks awal netral, counter karakter, seed, garis panduan, indikator proses, peringatan karakter hilang, navigasi halaman, pembesaran, unduhan PDF/PNG, Cmd/Ctrl+Enter, dan penanda hasil usang. Tambahkan layout responsif, fokus keyboard, kontrol radio terlihat, serta reduced motion.
+- `requirements.txt`: tambahkan FastAPI dan Uvicorn; `requirements-dev.txt`: tambahkan httpx untuk pengujian HTTP lokal. Dependensi baru dan transitif dicatat melalui D-023.
+- `.gitignore`: abaikan `.taste-skill/` berisi laporan/check browser dan profil sementara; dokumen pribadi tetap berada dalam `outputs/` yang sudah diabaikan Git.
+- `tests/test_interface.py`: lima metode uji API dengan bank buatan untuk halaman/profil/header, render/unduhan tanpa penyimpanan teks, validasi input/Origin/Host, bank belum siap, serta multipage dan isolasi hasil. Bersama pengujian sebelumnya, 19 metode lulus.
+- `docs/INTERFACE.md`: dokumentasikan rancangan ruang kerja, pengoperasian, API, penyimpanan lokal, serta batas aplikasi satu pemilik.
+- `README.md`, `SPEC.md`: dokumentasikan antarmuka yang sudah tersedia, cara menjalankan, dependensi pengujian, dan lingkup yang belum termasuk pengumpulan sampel melalui UI.
+- `DECISIONS.md`: tambahkan D-023 sebelum pemasangan dependensi dan implementasi.
+- `EVALUATION.md`: catat hasil pengujian API/browser dan batas pemeriksaan desain. Artefak serta log QA disimpan lokal di `outputs/ui-checks/`.
+- Verifikasi browser mencakup dokumen tiga halaman, karakter hilang, unduhan, zoom, hasil usang, error/pemulihan, dan shortcut. Responsivitas diperiksa di 1440/1024/820/768/390/320 piksel; perbaiki containing block animasi agar tombol tetap di dalam layar ponsel. Pemeriksa performa: 0 FAIL/5 WARN. Gate landing page tetap OPEN 15; lima waiver dan seluruh temuan/warning dicatat di panduan antarmuka, tanpa mengklaim PASS.
+- `CHANGELOG.md`: catat seluruh perubahan antarmuka; hasil render awal/QA tetap lokal dan tidak di-commit. Engine render dan geometri template tidak diubah.
+
 ### Hapus teks referensi abu-abu (D-022)
 - `make_template.py`: hapus pencetakan kalimat referensi abu-abu di TPL-03; judul, kotak, panduan, dan marker tetap.
 - `template_tulisan_A4.pdf`: buat ulang tanpa teks samar tersebut.

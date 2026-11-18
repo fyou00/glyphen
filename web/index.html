@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="id" data-type="software">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="page-type" content="software">
+  <meta name="site-kind" content="software">
+  <meta name="description" content="Buat catatan dan surat dalam tulisan tanganmu, langsung di perangkatmu.">
+  <meta name="theme-color" content="#f5f5f1">
+  <title>Glyphen — ruang menulis</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar nav">
+    <div class="wrap">
+    <a class="skip-link" href="#editor">Langsung ke editor</a>
+    <a class="wordmark" href="/" aria-label="Glyphen, ruang menulis">glyphen<span>.</span></a>
+    <span class="workspace-label">Ruang menulis</span>
+    <span class="local-label"><span class="local-dot" aria-hidden="true"></span>Berjalan di perangkatmu</span>
+    </div>
+  </header>
+  <main>
+    <section class="workspace hero" data-enter>
+      <div class="wrap">
+      <div class="page-heading">
+        <div><p class="eyebrow">Dari keyboard ke kertas</p><h1>Catatan dalam tulisan tanganmu.</h1></div>
+        <p class="page-intro">Tulis sebuah cerita.<br>Beri bentuk dengan tulisanmu sendiri.</p>
+      </div>
+      <div class="app-frame" data-visual>
+        <form id="editor" class="editor-panel" autocomplete="off">
+          <div class="panel-title"><h2>Catatanmu</h2><button id="clear" class="text-button" type="button">Kosongkan teks</button></div>
+          <div class="profile-row"><span class="avatar" aria-hidden="true">g.</span><div><span class="field-label">Tulisan tangan</span><strong id="profile-id">Memuat profil…</strong></div><span id="profile-state" class="profile-state">Memeriksa</span></div>
+          <fieldset class="document-types"><legend>Jenis dokumen</legend><div class="segmented">
+            <label><input type="radio" name="doc_type" value="catatan" checked><span>Catatan <small>Margin 20 mm</small></span></label>
+            <label><input type="radio" name="doc_type" value="surat"><span>Surat <small>Margin 25 mm</small></span></label>
+          </div></fieldset>
+          <div class="textarea-heading"><label for="text">Isi tulisan</label><span id="character-count">0 / 12.000</span></div>
+          <textarea id="text" name="text" maxlength="12000" spellcheck="false" aria-describedby="text-hint">Hari ini aku ingin menyimpan sebuah cerita kecil. Tentang hal yang membuatku tersenyum, percakapan yang masih kuingat, dan rencana untuk esok hari.
+
+Tidak semua hari perlu terasa istimewa. Kadang, mencatatnya saja sudah cukup.</textarea>
+          <p class="field-hint" id="text-hint">Baris kosong akan menjadi jeda antarparagraf.</p>
+          <details class="options"><summary>Pengaturan tulisan<span aria-hidden="true">+</span></summary><div class="options-content">
+            <label class="checkbox-row"><input id="guidelines" type="checkbox"><span>Tampilkan garis panduan</span></label>
+            <div class="seed-row"><label for="seed">Kunci variasi <span class="optional">opsional</span></label><input id="seed" type="number" min="0" max="2147483647" step="1" inputmode="numeric" placeholder="Acak setiap kali"></div>
+            <p class="field-hint">Angka yang sama menghasilkan variasi tulisan yang sama.</p>
+          </div></details>
+          <div id="form-error" class="message error" role="alert" hidden></div>
+          <button id="render" class="primary-button" type="submit" disabled><span class="button-symbol" aria-hidden="true">✎</span><span id="render-label">Buat tulisan tangan</span><kbd>⌘ ↵</kbd></button>
+          <p class="privacy-note">Teks diproses di perangkat ini. Tanpa unggahan ke layanan lain.</p>
+        </form>
+        <div class="preview-panel" aria-busy="false" id="preview-panel">
+          <div class="preview-toolbar"><div class="preview-title"><h2>Pratinjau</h2><span class="paper-size">A4</span></div><div class="preview-actions"><button id="zoom" class="icon-button zoom-button" type="button" aria-label="Perbesar pratinjau" aria-pressed="false">＋</button><div class="page-controls"><button id="previous" class="icon-button" type="button" aria-label="Halaman sebelumnya" disabled>‹</button><span id="page-counter">1 / 1</span><button id="next" class="icon-button" type="button" aria-label="Halaman berikutnya" disabled>›</button></div></div></div>
+          <div class="paper-stage" id="paper-stage">
+            <div class="paper" id="paper"><img id="preview-image" alt="Pratinjau halaman tulisan tangan dengan watermark tidak resmi" hidden><div id="preview-placeholder" class="paper-placeholder"><span class="paper-monogram" aria-hidden="true">g.</span><p>Sebentar, kertasmu sedang disiapkan.</p></div></div>
+            <div id="loading" class="loading-indicator" role="status" hidden><span class="spinner" aria-hidden="true"></span>Menyusun tulisanmu…</div>
+          </div>
+          <div class="preview-bottom"><div><p id="result-status" role="status" aria-live="polite">Menyiapkan pratinjau</p><p id="result-detail" class="result-detail">PDF untuk cetak. PNG untuk disimpan.</p></div><div class="downloads"><a id="download-pdf" class="download-button" aria-disabled="true">Unduh PDF</a><a id="download-png" class="download-button secondary" aria-disabled="true" aria-label="Unduh PNG halaman aktif">Unduh PNG</a></div></div>
+          <div id="missing-warning" class="message warning" role="status" hidden></div>
+        </div>
+      </div>
+      <footer class="workspace-footer"><span>Untuk catatan pribadi, dengan tulisanmu sendiri.</span><span>Setiap halaman ditandai tidak resmi.</span></footer>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

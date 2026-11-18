@@ -31,6 +31,8 @@ Sistem yang membuat dokumen (catatan, surat, undangan) dengan tulisan tangan dar
 | `scripts/evaluate_render.py` | Mengukur 10 render teks standar |
 | `scripts/evaluate_segmentation.py` | Audit sumber/crop, anotasi per kotak, dan metrik segmentasi |
 | `requirements.txt` | Dependensi Python |
+| `app.py`, `web/` | Antarmuka editor dan pratinjau lokal |
+| `docs/INTERFACE.md` | Perilaku dan verifikasi antarmuka |
 
 ## Persiapan
 
@@ -74,9 +76,20 @@ Engine memeriksa `consent.json`, `coverage.json`, dan kelulusan tinjauan dalam `
 
 Karakter yang belum tersedia menjadi placeholder dan tercatat dalam laporan. Seluruh halaman memiliki watermark wajib. Isi teks tidak ditulis ke log atau JSON laporan; ID dan statistik disimpan terpisah dari PNG.
 
+### 4. Buka antarmuka lokal
+
+```bash
+python app.py --user <id> --port 8010
+```
+
+Buka `http://127.0.0.1:8010/`. Tulis atau tempel teks, pilih catatan/surat, lalu klik **Buat tulisan tangan** (Cmd/Ctrl+Enter). Periksa pratinjau per halaman, perbesar bila perlu, lalu unduh PDF seluruh dokumen atau PNG halaman aktif. Seed dan garis panduan tersedia pada pengaturan tulisan.
+
+Antarmuka memuat contoh catatan netral dan membuat pratinjau awal secara lokal. Teks yang diubah belum disimpan atau dirender sampai tombol ditekan lagi; hasil lama ditandai perlu diperbarui. Hasil berada di `outputs/ui/` yang diabaikan Git. Tidak ada upload sampel atau autosave teks di browser. Profil pemilik ditentukan melalui `--user` saat memulai server. Lihat `docs/INTERFACE.md`.
+
 ### Pengujian
 
 ```bash
+python -m pip install -r requirements-dev.txt
 python -m unittest discover -s tests -v
 python scripts/evaluate_render.py --user <id> --out outputs/evaluasi-01
 ```
@@ -97,7 +110,7 @@ Audit menghasilkan enam lembar perbandingan kotak sumber dengan crop dan `review
 ## Yang belum ada
 
 - Uji persepsi kemiripan tulisan dan uji cetak hasil render.
-- Antarmuka pengguna (lihat `SPEC.md` bagian 8).
+- Antarmuka pengumpulan sampel dan persetujuan untuk pengguna baru; UI saat ini memakai glyph bank yang sudah siap.
 - Pengujian foto HP dengan variasi cahaya dan perspektif. Ekstraksi pada scan tulisan nyata sudah diuji; coverage dan hasil tinjauan tercatat di `EVALUATION.md`.
 
 ## Catatan untuk kontributor
