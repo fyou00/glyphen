@@ -10,7 +10,7 @@ Status: draft awal. Angka jitter, spasi, dan performa belum diuji pada glyph nya
 |---|---|---|
 | `text` | string | Teks dengan baris baru (`\n`) |
 | `user_id` | string | Harus punya `glyph_bank/<user_id>/manifest.json` dengan coverage valid |
-| `doc_type` | string | `catatan`, `surat`, atau `undangan` |
+| `doc_type` | string | `catatan` atau `surat`. `undangan` ditunda (lihat D-011) |
 | `output` | list | `pdf`, `png`, atau keduanya |
 | `seed` | int (opsional) | Untuk hasil yang bisa diulang saat debugging |
 
@@ -22,7 +22,7 @@ Jika `user_id` belum punya glyph bank, render dihentikan dengan pesan yang jelas
 |---|---|---|
 | `catatan` | 20 mm | Garis panduan opsional |
 | `surat` | 25 mm | Kop surat berupa teks biasa, tanpa logo |
-| `undangan` | 30 mm | Teks dipusatkan secara horizontal |
+| `undangan` | 30 mm | Ditunda ke tahap berikutnya (D-011). Rancangan: teks dipusatkan secara horizontal |
 
 Ukuran kertas: A4, 210 × 297 mm.
 
@@ -55,6 +55,8 @@ text + user_id + doc_type
 - Baca `manifest.json` dan `coverage.json`.
 - Simpan glyph `ok` dan `touches_edge` ke memori, dengan label sebagai kunci.
 - Jika ada label dengan 0 varian, tandai karakter itu sebagai tidak tersedia.
+- Render dihentikan jika ada huruf a–z atau A–Z dengan kurang dari 3 varian, sesuai D-012. Jangan mengisi kekurangan dengan varian huruf lain.
+- Huruf dengan 3 sampai 4 varian boleh dirender, tetapi ditandai di log sebagai di bawah target ideal (5).
 
 ## Tahap 2: Normalisasi teks
 
@@ -151,4 +153,4 @@ Perubahan nilai harus dicatat di `DECISIONS.md`.
 - Tulisan bersambung (cursive).
 - Tekanan tinta dan variasi ketebalan garis.
 - Koreksi kemiringan halaman di sisi render.
-- Gaya cepat (tidak ada glyph khusus untuk itu di tahap awal).
+- Gaya cepat. Tahap awal hanya memakai satu gaya dari template (D-013).

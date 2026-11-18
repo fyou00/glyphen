@@ -2,12 +2,23 @@
 
 Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri terbaru di atas.
 
+## [0.1.1] - 2026-11-19
+
+Keputusan atas pertanyaan terbuka dan pembaruan dokumen terkait.
+
+### Diubah
+- `SPEC.md`: bagian 11 berisi keputusan, bukan pertanyaan. Undangan ditandai ditunda di bagian 7.
+- `RENDER.md`: undangan ditandai ditunda. Ditambahkan gerbang coverage (render dihentikan jika ada huruf dengan kurang dari 3 varian). Gaya cepat dicatat sebagai tidak dicakup.
+- `DECISIONS.md`: ditambahkan D-011 (undangan ditunda), D-012 (coverage minimum 3, target 5), dan D-013 (satu gaya untuk tahap awal).
+
+### Diketahui belum teruji
+- Keputusan D-012 dan D-013 bergantung pada uji persepsi di `EVALUATION.md`, yang belum dilakukan.
+
 ## [0.1.0] - 2026-11-19
 
 Tahap dokumentasi dan template awal. Belum ada engine render dan belum ada pengujian pada foto nyata.
 
 ### Ditambahkan
-- `.gitignore`: mengecualikan glyph bank pribadi, cache Python, dan lingkungan virtual.
 - `make_template.py`: membuat `template_tulisan_A4.pdf` tiga halaman dengan kotak, label, garis panduan, marker sudut, dan kode halaman.
 - `template_tulisan_A4.pdf`: hasil dari `make_template.py`.
 - `extract_glyphs.py`: deteksi marker, koreksi perspektif, pemotongan kotak, klasifikasi status, dan penyimpanan glyph bank dengan `manifest.json`.
@@ -29,4 +40,4 @@ Tahap dokumentasi dan template awal. Belum ada engine render dan belum ada pengu
 ### Belum dikerjakan
 - Engine render.
 - Antarmuka pengguna.
-- Uji ekstraksi dan persepsi (lihat `EVALUATION.md`).	
+- Uji ekstraksi dan persepsi (lihat `EVALUATION.md`).

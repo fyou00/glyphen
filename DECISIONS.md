@@ -183,3 +183,57 @@ Sebelum tahap render dikembangkan lebih jauh, template dicetak, diisi, difoto, d
 
 **Konsekuensi**
 - Hasil uji pertama harus dicatat di `EVALUATION.md` dan bisa memicu entri baru di dokumen ini.
+
+---
+
+## D-011: Undangan ditunda, tahap awal hanya catatan dan surat
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif
+
+**Keputusan**
+Jenis dokumen tahap awal adalah catatan dan surat. Undangan ditunda ke tahap berikutnya.
+
+**Alasan**
+- Teks yang dipusatkan membutuhkan logika layout tambahan dan uji tersendiri.
+- Catatan dan surat sudah cukup untuk membuktikan pipeline dari ekstraksi sampai render.
+
+**Konsekuensi**
+- Bagian undangan di `SPEC.md` (bagian 7) dan `RENDER.md` ditandai ditunda.
+- Margin 30 mm untuk undangan tetap dicatat sebagai rancangan, belum diimplementasikan.
+
+---
+
+## D-012: Coverage minimum 3 varian, target ideal 5
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif
+
+**Keputusan**
+Render boleh dilakukan jika setiap huruf punya minimal 3 varian. Target ideal adalah 5 varian. Huruf yang kurang dari 3 ditandai tidak tersedia, tidak diisi dengan varian dari huruf lain.
+
+**Alasan**
+- Di bawah 3 varian, hasil render terlihat berulang.
+- Menyalin varian lain untuk menutup kekurangan membuat hasil tidak mewakili tulisan pemilik.
+
+**Konsekuensi**
+- Engine render harus memeriksa `coverage.json` sebelum merender.
+- Target 3 dan 5 tetap perkiraan dan harus diuji dengan `EVALUATION.md`.
+
+---
+
+## D-013: Satu gaya tulisan untuk tahap awal
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif
+
+**Keputusan**
+Tahap awal hanya memakai satu gaya, yaitu gaya rapi dari template. Gaya cepat tidak dikerjakan.
+
+**Alasan**
+- Gaya cepat membutuhkan halaman template tambahan dan beban tambahan bagi pengguna.
+- Belum ada bukti bahwa satu gaya tidak cukup.
+
+**Konsekuensi**
+- Keputusan ini ditinjau ulang setelah hasil uji persepsi di `EVALUATION.md`.
+- Jika gaya cepat diminta nanti, perlu entri baru dan perubahan `TEMPLATE.md`.

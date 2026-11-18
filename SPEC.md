@@ -115,6 +115,6 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 
 ## 11. Pertanyaan terbuka
 
-- Apakah jenis dokumen awal cukup tiga, atau perlu ditambah?
-- Berapa target minimal coverage sebelum glyph bank dianggap layak dipakai?
-- Apakah pengguna perlu memilih antara gaya rapi dan gaya cepat, atau cukup satu gaya?
+- Apakah jenis dokumen awal cukup tiga, atau perlu ditambah? Jawaban: Mulai dengan catatan dan surat. Undangan ditunda ke tahap berikutnya, karena teks yang dipusatkan butuh logika layout tambahan dan uji tersendiri.
+- Berapa target minimal coverage sebelum glyph bank dianggap layak dipakai? Jawaban: Gunakan minimal 3 varian per huruf untuk boleh merender, dan 5 varian sebagai target ideal. Jika ada huruf yang di bawah 3, render tetap jalan dengan peringatan, atau huruf itu ditandai tidak tersedia. Jangan menyalin varian lain untuk menutupi kekurangan.
+- Apakah pengguna perlu memilih antara gaya rapi dan gaya cepat, atau cukup satu gaya? Jawaban: Pakai satu gaya dulu. Gaya cepat butuh halaman template kedua dan beban tambahan bagi pengguna, dan belum ada bukti bahwa satu gaya tidak cukup. Uji dulu dengan satu gaya, lalu putuskan berdasarkan hasil uji persepsi di EVALUATION.md.
