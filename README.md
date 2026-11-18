@@ -64,7 +64,7 @@ Tahap render belum diimplementasikan. Lihat `RENDER.md` untuk spesifikasinya.
 
 - Engine render (lihat `RENDER.md`).
 - Antarmuka pengguna (lihat `SPEC.md` bagian 8).
-- Pengujian pada foto tulisan tangan nyata. Lihat `EVALUATION.md`.
+- Pengujian foto HP dengan variasi cahaya dan perspektif. Ekstraksi pada scan tulisan nyata sudah diuji; coverage dan hasil tinjauan tercatat di `EVALUATION.md`.
 
 ## Catatan untuk kontributor
 

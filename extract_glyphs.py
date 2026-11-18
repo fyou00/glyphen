@@ -63,6 +63,8 @@ def page_layout(n):
                 + grid_entries(UPPER[13:], 110, 265, 5, 10, 14, 1.5, 12, 16,
                                lambda c: f"upper_{c}"))
     if n == 3:
+        # Dua kotak kalimat contoh (D-016) hanya untuk evaluasi gaya;
+        # tidak diekstrak. Geometri angka dan tanda baca tetap sama.
         return (grid_entries(DIGITS, 15, 255, 3, 10, 16, 2, 9, 12,
                              lambda c: f"digit_{c}")
                 + grid_entries(PUNCT, 110, 255, 3, 12, 16, 2, 9, 12,
@@ -71,20 +73,17 @@ def page_layout(n):
 
 
 def find_markers(gray):
-    """Cari 4 marker sudut: kotak hitam pejal tanpa lubang, dekat tiap sudut foto."""
+    """Cari 4 marker sudut pejal; toleransi tekstur scan mengikuti D-017."""
     h, w = gray.shape
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    th = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                               cv2.THRESH_BINARY_INV, 51, 15)
-    cnts, hier = cv2.findContours(th, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+    # Otsu mempertahankan area marker scan yang terbelah oleh threshold adaptif.
+    _, solid_ink = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
+    cnts, hier = cv2.findContours(solid_ink, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if hier is None:
         raise RuntimeError("Tidak ada kontur ditemukan")
-    hier = hier[0]
 
     cands = []
     for i, c in enumerate(cnts):
-        if hier[i][2] != -1:          # punya lubang di dalam -> kotak kosong, bukan marker
-            continue
         area = cv2.contourArea(c)
         if not (0.00015 * h * w < area < 0.01 * h * w):
             continue
@@ -93,6 +92,8 @@ def find_markers(gray):
             continue
         if area / (bw * bh) < 0.9:    # harus pejal, bukan coretan
             continue
+        if float((solid_ink[y:y+bh, x:x+bw] > 0).mean()) < 0.9:
+            continue                 # tolak kotak garis meski kontur luarnya pejal
         M = cv2.moments(c)
         cands.append((M["m10"] / M["m00"], M["m01"] / M["m00"]))
 

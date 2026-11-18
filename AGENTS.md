@@ -56,7 +56,8 @@ Kerjakan dalam urutan ini. Jangan lompat tahap.
 
 ## Aturan kerja untuk agent
 - Setiap perubahan pada aturan render atau geometri harus dicatat di `DECISIONS.md`.
-- Setelah menyelesaikan tahap, perbarui `CHANGELOG.md`.
+- Catat setiap perubahan, sekecil apa pun, di `CHANGELOG.md`, termasuk perubahan dokumen, kode, dan file keluaran. Perbarui juga setelah menyelesaikan tahap.
+- Setelah menyelesaikan dan memverifikasi perubahan, buat commit untuk kode dan dokumentasi terkait. Sampel, glyph bank, dan keluaran pribadi tetap diabaikan Git.
 - Jangan menambahkan model machine learning tanpa persetujuan. Jalur saat ini adalah glyph bank tanpa ML.
 - Jangan menyimpan sampel tulisan dalam repositori publik. Gunakan `.gitignore` untuk `glyph_bank/`.
 - Jika ada pertanyaan yang tidak terjawab oleh dokumen ini, tanyakan kepada pengguna sebelum mengambil keputusan besar.

@@ -53,10 +53,10 @@ python extract_glyphs.py --user <id> --pages tpl01.jpg tpl02.jpg tpl03.jpg
 Kandidat marker dicari dengan langkah berikut:
 
 1. Konversi ke grayscale, lalu blur Gaussian 5 × 5.
-2. Threshold adaptif (blok 51, konstanta 15), tinta dibuat putih.
-3. Cari kontur dengan `RETR_CCOMP`.
+2. Threshold Otsu pada grayscale yang sudah diblur, tinta dibuat putih (D-017).
+3. Cari kontur luar dengan `RETR_EXTERNAL`.
 4. Saring kandidat:
-   - Kontur tidak punya lubang (kotak garis punya lubang, jadi dibuang).
+   - Minimal 90% piksel kotak pembatas berupa tinta pada mask Otsu; kotak garis ditolak. Pemeriksaan ini menggantikan penolakan semua kontur berlubang yang gagal pada marker scan bertekstur (D-017).
    - Luas antara 0,015% dan 1% luas foto.
    - Rasio lebar terhadap tinggi antara 0,75 dan 1,33.
    - Pejal: luas kontur / luas kotak pembatas minimal 0,9.
@@ -158,4 +158,4 @@ Aturan dari `AGENTS.md`: jika coverage kurang, minta pengguna mengulang halaman 
 - Pencahayaan kuat atau bayangan dapat membuat kotak kosong palsu. Ambang tinta bisa disesuaikan jika perlu.
 - Tulisan yang terlalu tipis tidak terhitung sebagai tinta.
 - Kalimat contoh di TPL-03 tidak diekstrak.
-- Pipeline belum diuji pada foto tulisan nyata.
+- Pipeline sudah diuji pada scan tulisan nyata (lihat Uji 1 dan Uji 2 di `EVALUATION.md`); ketahanan pada foto HP berbayang atau pencahayaan tidak merata belum diuji.

@@ -2,6 +2,54 @@
 
 Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri terbaru di atas.
 
+## [Unreleased] - 2026-11-19
+
+### Aturan commit
+- `AGENTS.md`: sesuai instruksi pemilik project, setiap perubahan yang selesai dan diverifikasi wajib di-commit; data pribadi tetap diabaikan Git.
+
+### Ekstraksi ulang dan validasi coverage: Uji 2
+- Input pribadi lokal: pindahkan `Scan.jpeg` baru (TPL-01) dan `Scan 1.jpeg` baru (TPL-03) ke `scan_demo/attempt02/originals/`, simpan PNG kerja tanpa rotasi tambahan, dan gunakan kembali TPL-02 sebelumnya.
+- Metadata lokal: arsipkan pemetaan percobaan pertama dalam `metadata_attempt01.json`; perbarui `metadata.json` aktif serta salin ke percobaan kedua dan `consent.json` glyph bank. Persetujuan pemilik sebelumnya tetap dipakai.
+- Arsip lokal: pindahkan glyph bank pertama ke `glyph_bank/history/` sebelum ekstraksi ulang agar hasil lama tidak tertimpa atau bercampur dengan varian baru.
+- Hasil lokal: buat ulang manifest, 323 glyph, tiga debug, laporan ekstraksi per label, serta `coverage.json`. Tambahkan pratinjau input, debug kecil, lembar tinjauan glyph, dan pembandingan empat potongan bertanda dengan kotak penuh di `scan_demo/`.
+- Hasil verifikasi: 319 ok, 0 empty, 4 touches_edge; empat tanda tepi ditinjau dan tinta tampak utuh. 52/52 huruf punya 5 varian dan 21 label angka/tanda baca punya 3 varian; tidak ada label di bawah target. Seluruh file tersedia, dan TPL-02 identik hasil pertama.
+- `EVALUATION.md`: tambahkan Uji 2, perbandingan hasil, kelulusan tinjauan, coverage, dan batas pengukuran yang belum dilakukan.
+- `README.md`, `SPEC.md`, `PIPELINE.md`: perbarui status pengujian scan nyata; uji foto HP dalam variasi cahaya dan render tetap belum selesai.
+- `CHANGELOG.md`: catat seluruh perubahan percobaan ini. Tidak ada perubahan algoritme, geometri, parameter crop, atau aturan render; tidak ada keputusan arsitektur baru.
+
+### Ekstraksi scan nyata pertama (D-017)
+- `.gitignore`: abaikan `scan_demo/` untuk melindungi sampel dan metadata pribadi.
+- File pribadi lokal: pindahkan tiga JPEG ke `scan_demo/originals/`; simpan PNG kerja dengan TPL-01 diputar 180°, urutan halaman tetap, serta persetujuan dan hash sumber di `metadata.json`. Buat pratinjau masukan, salinan debug berukuran kecil, dan lembar tinjauan glyph di folder yang sama.
+- Lingkungan `.venv`: pasang OpenCV dan NumPy yang sudah termasuk stack project.
+- `extract_glyphs.py`: ganti threshold marker adaptif dengan Otsu, kontur luar, dan pemeriksaan isi tinta minimal 90%; koordinat dan parameter crop tetap.
+- `PIPELINE.md`: selaraskan dokumentasi deteksi marker dengan implementasi.
+- `glyph_bank/` (diabaikan Git): hasilkan 323 glyph, manifest, tiga debug PNG, salinan persetujuan dalam `consent.json`, dan `extraction_report.json` berisi statistik tiap label serta hasil tinjauan visual.
+- `DECISIONS.md`: tambahkan D-017 beserta alasan perubahan deteksi dan batas pengujiannya.
+- `EVALUATION.md`: catat percobaan gagal, hasil ekstraksi, dan temuan tinta terpotong pada TPL-01. Coverage serta render ditahan; tahap ekstraksi belum lulus tinjauan.
+- `CHANGELOG.md`: catat seluruh perubahan pemrosesan ini. Verifikasi: marker pejal diterima, kotak garis ditolak, empat marker terdeteksi per scan, dan seluruh file glyph tercatat tersedia.
+
+### Penyesuaian kotak kalimat contoh (D-016)
+- `make_template.py`: kurangi enam kotak kalimat contoh menjadi dua dan perjelas instruksi satu kalimat per kotak besar.
+- `template_tulisan_A4.pdf`: dibuat ulang dengan dua kotak contoh di TPL-03.
+- `TEMPLATE.md`: dokumentasikan dua kotak, koordinatnya, dan fungsi garis putus-putus.
+- `SPEC.md`: selaraskan jumlah kotak kalimat contoh di bagian 4.
+- `extract_glyphs.py`: perbarui komentar agar sesuai dengan dua kotak contoh yang tidak diekstrak; koordinat ekstraksi tetap.
+- `DECISIONS.md`: tambahkan D-016; entri keputusan lama tetap dipertahankan.
+- `AGENTS.md`: wajibkan pencatatan setiap perubahan, sekecil apa pun, di changelog.
+- `EVALUATION.md`: tambahkan hasil pemeriksaan PDF dua kotak tanpa mengubah riwayat pemeriksaan sebelumnya.
+- `CHANGELOG.md`: catat seluruh perubahan dan verifikasi penyesuaian ini.
+- Verifikasi penyesuaian: PDF tetap tiga halaman; TPL-01/TPL-02 identik; TPL-03 tepat dua kotak contoh dengan geometri glyph dan marker tetap; sintaks kedua skrip valid. Uji cetak dan ekstraksi nyata belum dilakukan.
+
+### Diperbaiki
+- `make_template.py`: melengkapi bagian akhir yang terpotong dan fungsi utama untuk membuat PDF tiga halaman.
+- `template_tulisan_A4.pdf`: dibuat ulang; stream konten ketiga halaman identik dengan PDF awal, tanpa perubahan geometri.
+- `SPEC.md`: render wajib dihentikan jika ada huruf a–z atau A–Z dengan kurang dari 3 varian.
+- `DECISIONS.md`: keputusan D-014 tentang gerbang coverage dan D-015 tentang pemulihan skrip.
+
+### Verifikasi
+- Pembuatan PDF berhasil dengan `.venv/bin/python make_template.py`; tiga objek halaman dan seluruh stream konten dibandingkan dengan PDF awal.
+- Pencetakan, pengisian, dan ekstraksi foto nyata masih menunggu pengguna; tahap template fisik dan ekstraksi belum dinyatakan selesai.
+
 ## [0.1.1] - 2026-11-19
 
 Keputusan atas pertanyaan terbuka dan pembaruan dokumen terkait.

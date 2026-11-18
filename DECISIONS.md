@@ -237,3 +237,76 @@ Tahap awal hanya memakai satu gaya, yaitu gaya rapi dari template. Gaya cepat ti
 **Konsekuensi**
 - Keputusan ini ditinjau ulang setelah hasil uji persepsi di `EVALUATION.md`.
 - Jika gaya cepat diminta nanti, perlu entri baru dan perubahan `TEMPLATE.md`.
+
+---
+
+## D-014: Render dihentikan jika coverage huruf belum memenuhi minimum
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif; memperjelas D-006 dan D-012
+
+**Keputusan**
+Sesuai instruksi terbaru pemilik project, setiap huruf a–z dan A–Z wajib memiliki minimal 3 varian sebelum render. Jika ada huruf di bawah minimum, hentikan render dan minta pengulangan halaman terkait. Target ideal tetap 5 varian. Kekurangan tidak boleh diisi dengan menyalin varian.
+
+**Alasan**
+- Menghilangkan opsi render dengan peringatan pada `SPEC.md` yang bertentangan dengan gerbang coverage di `RENDER.md` dan instruksi terbaru.
+
+**Konsekuensi**
+- `SPEC.md` bagian 5 dan 11 diperbarui; implementasi engine kelak wajib menerapkan gerbang ini.
+- Angka minimum dan target tetap perlu dievaluasi pada sampel nyata.
+
+---
+
+## D-015: Pemulihan skrip template dari geometri terdokumentasi
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif
+
+**Keputusan**
+Lengkapi bagian akhir `make_template.py` yang terpotong: teks referensi, enam baris contoh, marker halaman ketiga, dan fungsi utama untuk menyimpan tiga halaman A4. Posisi baris contoh dipulihkan dari PDF awal (x = 15 mm, y bawah = 97 − 14 × indeks mm, ukuran 180 × 12 mm), sesuai `TEMPLATE.md`. Geometri ekstraksi tidak berubah.
+
+**Alasan**
+- Skrip awal menghasilkan `SyntaxError` dan tidak dapat membuat ulang template.
+- Konten ketiga halaman hasil pemulihan diverifikasi identik dengan stream konten PDF awal.
+
+**Konsekuensi**
+- Tidak diperlukan perubahan geometri pada `extract_glyphs.py` atau `TEMPLATE.md`.
+- Lingkungan lokal `.venv` memakai Python 3.13 dan ReportLab; dependensi transitif yang terpasang adalah Pillow dan charset-normalizer. Tidak ada dependensi baru yang dipakai langsung oleh kode project.
+
+---
+
+## D-016: Dua kotak kalimat contoh untuk dua pengulangan
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif; menggantikan jumlah enam kotak contoh pada D-015
+
+**Keputusan**
+Sesuai permintaan pemilik project, area kalimat contoh TPL-03 berisi dua kotak, satu kalimat per kotak. Pertahankan dua kotak pertama pada (15, 97) dan (15, 83) mm dari kiri-bawah halaman, masing-masing 180 × 12 mm; hapus empat kotak sisanya. Dua garis putus-putus di dalam setiap kotak tetap menjadi panduan tulisan.
+
+**Alasan**
+- Jumlah kotak harus sesuai dengan instruksi untuk menulis kalimat dua kali.
+
+**Konsekuensi**
+- Perbarui `make_template.py`, `TEMPLATE.md`, `SPEC.md`, dan PDF template. Sinkronkan komentar `page_layout()` di `extract_glyphs.py`: dua kotak contoh tetap dikecualikan dari ekstraksi.
+- Geometri glyph dan marker tetap; foto template lama tetap memiliki posisi kotak glyph yang sama.
+- Semua perubahan, sekecil apa pun, wajib dicatat di `CHANGELOG.md`; aturan ini juga ditambahkan ke `AGENTS.md` sesuai permintaan pemilik project.
+
+---
+
+## D-017: Deteksi marker scan menggunakan Otsu dan pemeriksaan isi
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif; menggantikan tahap threshold dan penyaringan lubang pada pipeline awal
+
+**Keputusan**
+Deteksi marker menggunakan threshold Otsu setelah blur Gaussian 5 × 5, kontur luar `RETR_EXTERNAL`, dan syarat minimal 90% piksel tinta di kotak pembatas. Batas luas, rasio sisi, kepejalan kontur minimal 0,9, kedekatan sudut, dan keunikan marker tetap dipakai. Geometri template, inset 1,2 mm, dan parameter klasifikasi glyph tidak berubah.
+
+**Alasan**
+- Pada scan nyata pertama, threshold adaptif membentuk lubang dan memecah area marker; algoritme awal menolak seluruh marker TPL-01. Melonggarkan pemeriksaan lubang saja masih gagal pada satu marker TPL-02.
+- Pemeriksaan isi tinta membedakan marker pejal dari kotak garis tanpa menolak tekstur scan.
+
+**Konsekuensi**
+- Ketiga scan dapat diekstrak dengan empat marker per halaman. Uji buatan marker abu-abu pejal diterima dan kotak garis ditolak.
+- Perubahan baru diuji pada tiga scan ini dan uji buatan sederhana; ketahanan pada foto berbayang atau cahaya tidak merata belum terbukti.
+- Tinjauan visual menemukan tinta terpotong pada sejumlah glyph kecil. Validasi coverage dan render ditahan; tidak ada perubahan inset otomatis.
+- Scan pribadi disimpan lokal dalam `scan_demo/` yang diabaikan Git; persetujuan dan pemetaan halaman disimpan dalam JSON terpisah. Glyph bank tetap diabaikan Git.

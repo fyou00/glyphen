@@ -1,7 +1,7 @@
 # SPEC: Generator Dokumen Tulisan Tangan (glyph bank tanpa ML)
 
 Versi: 0.1 (draft awal)
-Status: belum diuji pada foto tulisan tangan asli
+Status: ekstraksi dan coverage sudah diuji pada scan tulisan tangan asli; render dan ketahanan foto HP belum diuji (lihat `EVALUATION.md`)
 
 ## 1. Ringkasan
 
@@ -35,7 +35,7 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 - Terdiri dari tiga halaman:
   - **TPL-01**: huruf kecil a–z, 5 varian per huruf.
   - **TPL-02**: huruf kapital A–Z, 5 varian per huruf, dibagi dua kolom.
-  - **TPL-03**: angka 0–9 (3 varian), tanda baca `. , ? ! : ; " ' - ( )` (3 varian), dan area kalimat contoh.
+  - **TPL-03**: angka 0–9 (3 varian), tanda baca `. , ? ! : ; " ' - ( )` (3 varian), dan dua kotak kalimat contoh (satu kalimat per kotak; D-016).
 - Setiap halaman memiliki empat marker kotak hitam pejal di sudut dan kode halaman di bagian bawah tengah.
 - Geometri lengkap didefinisikan di `make_template.py`. Perubahan geometri harus diikuti pembaruan `TEMPLATE.md` dan `extract_glyphs.py`.
 
@@ -57,6 +57,7 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 - Minimal 3 varian untuk setiap huruf a–z dan A–Z.
 - Target ideal 5 varian untuk huruf dan 3 varian untuk angka serta tanda baca.
 - Coverage dicatat di `coverage.json`.
+- Render dihentikan jika ada huruf a–z atau A–Z dengan kurang dari 3 varian. Laporkan label yang belum lengkap dan minta pengguna mengulang halaman terkait; jangan menyalin varian untuk menutupi kekurangan (D-014).
 
 ## 6. Engine render
 
@@ -116,5 +117,5 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 ## 11. Pertanyaan terbuka
 
 - Apakah jenis dokumen awal cukup tiga, atau perlu ditambah? Jawaban: Mulai dengan catatan dan surat. Undangan ditunda ke tahap berikutnya, karena teks yang dipusatkan butuh logika layout tambahan dan uji tersendiri.
-- Berapa target minimal coverage sebelum glyph bank dianggap layak dipakai? Jawaban: Gunakan minimal 3 varian per huruf untuk boleh merender, dan 5 varian sebagai target ideal. Jika ada huruf yang di bawah 3, render tetap jalan dengan peringatan, atau huruf itu ditandai tidak tersedia. Jangan menyalin varian lain untuk menutupi kekurangan.
+- Berapa target minimal coverage sebelum glyph bank dianggap layak dipakai? Jawaban: Minimal 3 varian untuk setiap huruf a–z dan A–Z sebelum render boleh dilakukan; 5 varian adalah target ideal. Jika ada huruf dengan kurang dari 3 varian, hentikan render, laporkan label yang belum lengkap, dan minta pengguna mengulang halaman terkait. Jangan menyalin varian lain untuk menutupi kekurangan (D-014).
 - Apakah pengguna perlu memilih antara gaya rapi dan gaya cepat, atau cukup satu gaya? Jawaban: Pakai satu gaya dulu. Gaya cepat butuh halaman template kedua dan beban tambahan bagi pengguna, dan belum ada bukti bahwa satu gaya tidak cukup. Uji dulu dengan satu gaya, lalu putuskan berdasarkan hasil uji persepsi di EVALUATION.md.
