@@ -4,6 +4,14 @@ Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri t
 
 ## [Unreleased] - 2026-11-19
 
+### Hapus teks referensi abu-abu (D-022)
+- `make_template.py`: hapus pencetakan kalimat referensi abu-abu di TPL-03; judul, kotak, panduan, dan marker tetap.
+- `template_tulisan_A4.pdf`: buat ulang tanpa teks samar tersebut.
+- `TEMPLATE.md`: simpan kalimat referensi sebagai petunjuk pengisian dalam dokumen, bukan teks cetak di area tulis.
+- `DECISIONS.md`: tambahkan D-022; entri lama tetap dipertahankan.
+- Verifikasi: PDF tetap tiga halaman, TPL-01/TPL-02 identik, seluruh persegi panjang kotak/marker TPL-03 identik, dan kalimat referensi tidak ada dalam konten TPL-03.
+- `CHANGELOG.md`: catat seluruh perubahan konten template ini; perubahan yang diverifikasi dibuatkan commit.
+
 ### Pelebaran kecil spasi antarkata (D-021)
 - `render_document.py`: naikkan pengali token spasi dari 2,5 menjadi 3,0 (+20%); parameter antarhuruf dan jitter tetap.
 - `RENDER.md`: selaraskan pengali aktif dan rujukan keputusan.

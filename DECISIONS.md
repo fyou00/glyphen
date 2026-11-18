@@ -387,3 +387,19 @@ Naikkan pengali spasi antarkata dari 2,5 menjadi 3,0 kali jarak dasar, yaitu ken
 **Konsekuensi**
 - Word wrap dapat berubah karena kata-kata memerlukan ruang lebih lebar. Bandingkan paragraf dan seed yang sama dengan hasil sebelumnya, lalu jalankan kembali pengujian renderer.
 - Ini penyesuaian berdasarkan umpan balik pemilik; belum merupakan hasil uji persepsi banyak penilai. Hasil benchmark lama tetap menjadi riwayat parameter sebelumnya.
+
+---
+
+## D-022: Hapus teks referensi abu-abu pada area kalimat contoh
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif; memperbarui konten area contoh pada D-015 dan D-016
+
+**Keputusan**
+Sesuai permintaan pemilik, hapus teks cetak abu-abu `The quick brown fox jumps over the lazy dog` dari TPL-03. Kalimat yang harus ditulis tetap dijelaskan di `TEMPLATE.md`. Pertahankan judul, dua kotak tulis, garis panduan, dan marker.
+
+**Alasan**
+- Teks samar mengganggu area kalimat contoh dan dapat bertumpuk dengan tulisan pengguna.
+
+**Konsekuensi**
+- Buat ulang PDF template dan selaraskan dokumentasi pengisian. Tidak ada perubahan geometri, ekstraksi glyph, atau engine render; template yang sudah diisi tetap dapat diproses.

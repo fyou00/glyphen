@@ -83,10 +83,6 @@ def page3(c):
     y_title = 113*mm
     c.setFont("Helvetica-Bold", 10)
     c.drawString(15*mm, y_title, "Kalimat contoh (dua kali, satu kalimat per kotak besar)")
-    c.setFont("Helvetica", 10)
-    c.setFillColor(grey)
-    c.drawString(15*mm, y_title - 7*mm,
-                 "The quick brown fox jumps over the lazy dog")
     c.setFillColor(black)
     for i in range(2):
         box(c, 15*mm, (97 - i*14)*mm, 180*mm, 12*mm, stroke=lightgrey)

@@ -91,9 +91,9 @@ Kunci label tanda baca memakai nama, bukan simbol, supaya aman sebagai nama fold
 | `)` | `punct_rparen` |
 
 ### Kalimat contoh (bawah)
-- Judul "Kalimat contoh" di 113 mm dari bawah, dengan teks referensi abu-abu `The quick brown fox jumps over the lazy dog`.
+- Judul "Kalimat contoh" di 113 mm dari bawah. Teks referensi abu-abu tidak dicetak, sesuai D-022, agar tidak mengganggu area tulis.
 - Dua kotak tulis, masing-masing 180 × 12 mm, mulai dari x = 15 mm dengan jarak 14 mm. Koordinat kiri-bawah kotak: (15, 97) dan (15, 83) mm dari kiri-bawah halaman (D-016).
-- Tulis kalimat referensi dua kali: satu kalimat di setiap kotak besar. Dua garis putus-putus di dalam kotak adalah panduan tulisan, bukan dua baris terpisah.
+- Tulis `The quick brown fox jumps over the lazy dog` dua kali: satu kalimat di setiap kotak besar. Kalimat referensi cukup dibaca dari dokumen ini. Dua garis putus-putus di dalam kotak adalah panduan tulisan, bukan dua baris terpisah.
 - Bagian ini **tidak** diekstrak ke glyph bank. Dipakai untuk evaluasi gaya.
 
 ## Aturan cetak dan pengisian
