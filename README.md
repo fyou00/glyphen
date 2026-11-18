@@ -27,11 +27,14 @@ Sistem yang membuat dokumen (catatan, surat, undangan) dengan tulisan tangan dar
 | `CHANGELOG.md` | Riwayat perubahan |
 | `make_template.py` | Membuat template A4 tiga halaman |
 | `extract_glyphs.py` | Mengekstrak glyph dari foto template |
+| `render_document.py` | Merender teks menjadi PDF/PNG tidak resmi |
+| `scripts/evaluate_render.py` | Mengukur 10 render teks standar |
+| `requirements.txt` | Dependensi Python |
 
 ## Persiapan
 
 ```bash
-pip install reportlab opencv-python numpy
+python -m pip install -r requirements.txt
 ```
 
 Python 3.9 atau lebih baru.
@@ -58,11 +61,30 @@ Hasil ada di `glyph_bank/<id>/`. Periksa `debug_page*.png` sebelum memakai hasil
 
 ### 3. Render dokumen
 
-Tahap render belum diimplementasikan. Lihat `RENDER.md` untuk spesifikasinya.
+Siapkan file teks UTF-8 di `outputs/teks.txt` (folder `outputs/` diabaikan Git), lalu jalankan:
+
+```bash
+python render_document.py --user <id> --text-file outputs/teks.txt --doc-type catatan --out outputs/catatan-01 --seed 42
+```
+
+Hasil: `document.pdf`, `page_001.png` (dan halaman lanjutan), serta `render_report.json`. Gunakan folder keluaran baru pada setiap render agar hasil tidak tercampur. Pilih `--doc-type surat` untuk margin 25 mm, `--format pdf` atau `--format png` untuk satu format, dan `--guidelines` untuk garis panduan catatan. Undangan masih ditunda.
+
+Engine memeriksa `consent.json`, `coverage.json`, dan kelulusan tinjauan dalam `extraction_report.json`. Setiap huruf wajib punya minimal 3 file varian unik; glyph `touches_edge` wajib memiliki persetujuan tinjauan per varian. Tidak ada fallback ke bank pengguna lain.
+
+Karakter yang belum tersedia menjadi placeholder dan tercatat dalam laporan. Seluruh halaman memiliki watermark wajib. Isi teks tidak ditulis ke log atau JSON laporan; ID dan statistik disimpan terpisah dari PNG.
+
+### Pengujian
+
+```bash
+python -m unittest discover -s tests -v
+python scripts/evaluate_render.py --user <id> --out outputs/evaluasi-01
+```
+
+Pengujian otomatis memakai bank buatan sementara. Evaluasi memakai bank pengguna yang telah ditinjau dan menghasilkan 10 pasangan PDF/PNG serta `summary.json` lokal. Lihat `EVALUATION.md` untuk hasil dan batas pengujian.
 
 ## Yang belum ada
 
-- Engine render (lihat `RENDER.md`).
+- Uji persepsi kemiripan tulisan dan uji cetak hasil render.
 - Antarmuka pengguna (lihat `SPEC.md` bagian 8).
 - Pengujian foto HP dengan variasi cahaya dan perspektif. Ekstraksi pada scan tulisan nyata sudah diuji; coverage dan hasil tinjauan tercatat di `EVALUATION.md`.
 

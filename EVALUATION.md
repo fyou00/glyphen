@@ -125,6 +125,29 @@ Isi bagian ini setiap kali ada uji. Jangan menghapus entri lama.
 - Verifikasi: 323 file glyph tersedia dan manifest TPL-02 identik percobaan pertama. `extraction_report.json` menyimpan rincian label dan hasil tinjauan. Tidak ada varian yang disalin untuk menambah coverage.
 - Batas: belum menghitung ketepatan pemotongan sebagai persentase dari anotasi per kotak; belum mengukur variasi antar-instance, performa render, atau persepsi. Engine render belum dikerjakan pada percobaan ini.
 
+### Uji 3: engine render awal dan 10 seed, 2026-11-19
+- Engine `render_document.py` memakai glyph bank hasil Uji 2 yang sudah memenuhi coverage dan tinjauan visual. Contoh diary netral menghasilkan satu PDF A4 dan PNG 2480 × 3508 piksel pada 300 DPI, dengan 165 instance glyph dan tanpa karakter hilang.
+- Contoh diary ditinjau pada PNG dan hasil rasterisasi PDF melalui PDFKit macOS. Tulisan dan watermark tampak; PDFKit mengonfirmasi ukuran A4 dan watermark sebagai teks halaman. Ini belum merupakan uji persepsi kemiripan atau uji cetak.
+- Sebelas pengujian otomatis dengan bank buatan sementara lulus: normalisasi, persetujuan/identitas/tinjauan, isolasi path pengguna, file hilang/duplikat, coverage nyata, penerimaan varian tepi, seed berulang/berbeda, penghindaran varian berurutan, word wrap/pagination/margin, placeholder, watermark multipage, format tunggal, teks kosong, serta penolakan folder hasil lama. Kasus terkait digabung dalam metode uji.
+- Evaluasi terulang melalui `.venv/bin/python scripts/evaluate_render.py --user <id> --out outputs/evaluasi-baru`, memakai teks standar bagian 5 tanpa perubahan.
+- Lingkungan: Python 3.13.18, macOS/Darwin x86_64; Pillow/ReportLab/OpenCV/NumPy lokal, tanpa GPU atau model ML. Waktu mencakup pemuatan bank, layout, ekspor PDF, dan PNG, dilaporkan oleh engine sebelum penulisan JSON laporan.
+
+| Metrik | Hasil |
+|---|---|
+| Jumlah render / halaman | 10 seed berbeda / 10 halaman |
+| Waktu rata-rata per halaman | 0,81819 detik |
+| Waktu minimum–maksimum per halaman | 0,6558–1,3246 detik |
+| Pasangan kotak glyph bertumpuk | 0 pada semua halaman/seed |
+| Label yang muncul dengan simpangan baku lebar instance > 0 | 33/33 label; rentang 1,044–7,593 piksel sumber |
+| Label bank dengan simpangan baku lebar tinta varian > 0 | 73/73 label; rentang 0,471–12,862 piksel sumber |
+| Karakter tidak tersedia pada teks standar | `/` (dua kemunculan per render), tampil sebagai placeholder |
+
+- Target waktu <2 detik/halaman dan variasi lebar >0 tercapai pada sampel serta mesin ini. Pemeriksaan kotak gambar menunjukkan 0 tumpang tindih; tidak ada pengukuran persepsi manusia.
+- Target 0 karakter hilang pada teks standar belum tercapai: slash tidak ada pada template. Tidak membuat glyph baru atau menyalin glyph lain; placeholder terlihat pada pratinjau dan slash tercatat dalam laporan.
+- Tinggi baris contoh diary 7,358 mm mengikuti batas envelope D-019. Nilai dasar rotasi ±3°, offset ±0,4 mm, baseline ±0,3 mm, skala ±5%, pengali tinggi 2,4, jarak 0,15, dan spasi kata 2,5 tetap dipertahankan; belum dikalibrasi melalui uji persepsi.
+- Hasil pribadi dan statistik rinci tetap lokal di `outputs/` yang diabaikan Git, termasuk `demo/`, `cli-check/`, dan `evaluation/summary.json`. CLI dengan file UTF-8 juga diuji untuk catatan dengan garis panduan.
+- Keputusan terkait: D-018 dan D-019. Tahap engine render awal selesai; uji persepsi, hasil cetak, ketahanan bank lain, dan karakter di luar template masih memerlukan evaluasi lanjutan.
+
 <!--
 Template entri:
 

@@ -1,7 +1,7 @@
 # SPEC: Generator Dokumen Tulisan Tangan (glyph bank tanpa ML)
 
 Versi: 0.1 (draft awal)
-Status: ekstraksi dan coverage sudah diuji pada scan tulisan tangan asli; render dan ketahanan foto HP belum diuji (lihat `EVALUATION.md`)
+Status: ekstraksi, coverage, dan engine render awal sudah diuji; persepsi, hasil cetak render, dan ketahanan foto HP belum diuji (lihat `EVALUATION.md`)
 
 ## 1. Ringkasan
 
@@ -64,7 +64,7 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 ### Input
 - Teks (string, dengan baris baru).
 - ID pengguna.
-- Jenis dokumen (misalnya surat, undangan, catatan).
+- Jenis dokumen: catatan atau surat; undangan ditunda sesuai D-011.
 
 ### Proses
 1. Pecah teks menjadi baris sesuai lebar area tulis A4 dan margin dari jenis dokumen.
@@ -78,7 +78,7 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 ### Output
 - PDF untuk cetak.
 - PNG untuk pratinjau.
-- Setiap output memuat penanda "tidak resmi" (watermark atau metadata).
+- Setiap halaman output memuat watermark terlihat "TIDAK RESMI - HASIL GENERASI" sebagai konten halaman, sesuai `ETHICS.md`.
 
 ### Performa
 - Target: kurang dari 2 detik per halaman A4 pada laptop biasa tanpa GPU.
@@ -89,7 +89,7 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 |---|---|---|
 | Catatan | 20 mm | Garis panduan opsional |
 | Surat | 25 mm | Kop surat berupa teks biasa |
-| Undangan | 30 mm | Teks di tengah halaman |
+| Undangan | 30 mm | Ditunda (D-011); rancangan teks di tengah halaman |
 
 ## 8. Antarmuka (tahap berikutnya)
 

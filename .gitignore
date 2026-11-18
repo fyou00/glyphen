@@ -1,5 +1,6 @@
 glyph_bank/
 scan_demo/
+outputs/
 __pycache__/
 *.py[cod]
 .venv/

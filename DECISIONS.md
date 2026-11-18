@@ -310,3 +310,44 @@ Deteksi marker menggunakan threshold Otsu setelah blur Gaussian 5 × 5, kontur l
 - Perubahan baru diuji pada tiga scan ini dan uji buatan sederhana; ketahanan pada foto berbayang atau cahaya tidak merata belum terbukti.
 - Tinjauan visual menemukan tinta terpotong pada sejumlah glyph kecil. Validasi coverage dan render ditahan; tidak ada perubahan inset otomatis.
 - Scan pribadi disimpan lokal dalam `scan_demo/` yang diabaikan Git; persetujuan dan pemetaan halaman disimpan dalam JSON terpisah. Glyph bank tetap diabaikan Git.
+
+---
+
+## D-018: Engine render lokal dengan pemeriksaan bank dan mask tinta
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif
+
+**Keputusan**
+Implementasikan API Python dan CLI `render_document.py` untuk catatan/surat, memakai Pillow, NumPy, OpenCV, dan ReportLab yang sudah disetujui. Wajib memverifikasi identitas, persetujuan pemilik dalam `consent.json`, kelulusan tinjauan ekstraksi beserta setiap varian tepi, jumlah file terhadap coverage, dan minimum 3 varian tiap huruf. Larang path keluar bank pengguna serta entri file/varian duplikat. Tidak ada fallback antar-pengguna.
+
+Glyph dimuat sekali per render. Mask tinta memakai ambang 128 dan penyaringan komponen dengan luas minimal maksimum 2 piksel atau 1% komponen terbesar; komponen kecil yang tidak memenuhi batas dibuang. Glyph dipangkas ke batas tinta, baseline dihitung dari geometri garis panduan, kertas dibuat transparan, lalu varian, skala 0,95–1,05, rotasi ±3°, dan offset ±0,4 mm diterapkan dengan seed. Bank asli tetap utuh. Nilai penyaringan ini parameter awal dan belum divalidasi lintas sampel.
+
+**Alasan**
+- Kertas/garis panduan dan lebar kotak template tidak boleh ikut menjadi bentuk huruf dan jarak antarhuruf pada dokumen hasil.
+- Coverage harus cocok dengan berkas yang dapat dibaca, dan persetujuan/tinjauan harus dapat ditelusuri sebelum render.
+
+**Konsekuensi**
+- Tambahkan `requirements.txt` dengan library stack yang sudah disetujui; tidak ada library baru di luar stack.
+- Gambar glyph yang sangat tipis atau tanda kecil tetap perlu ditinjau pada sampel lain untuk menilai pengaruh penyaringan.
+- PDF A4 menyimpan glyph pada skala sumber 10 px/mm; PNG 300 DPI RGB. Kedua format menggambar watermark setiap halaman. ID dan jenis dokumen dalam Subject PDF; ID/statistik lain di JSON terpisah, tanpa isi teks atau identitas tambahan di PNG.
+- `outputs/` diabaikan Git, dan folder hasil lama tidak ditimpa. Pengujian memakai bank buatan sementara tanpa menyimpan sampel pengguna dalam repositori.
+
+---
+
+## D-019: Batas layout mengikuti glyph setelah jitter
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif; memperjelas D-009 dan memperbaiki aturan tumpang tindih pada RENDER.md
+
+**Keputusan**
+Pilih varian dan jitter sekali sebelum word wrap. Lebar token memakai gambar setelah skala/rotasi, ditambah jarak dasar 0,15 × lebar tinta rata-rata label dan variasi ±0,3 mm dengan minimum 0,1 mm. Spasi antarkata tetap 2,5 × jarak dasar rata-rata seluruh label. Pertahankan pengali tinggi baris 2,4, dengan x-height median label a,c,e,m,n,o,r,s,u,v,w,x. Tinggi baris tidak boleh kurang dari envelope seluruh glyph setelah jitter ditambah ruang offset baseline ±0,3 mm dan 0,1 mm pemisah. Posisi halaman mengikuti batas gambar aktual agar tidak keluar margin.
+
+**Alasan**
+- Word wrap harus memakai ukuran yang benar-benar ditempel, termasuk kapital, placeholder, dan kata panjang.
+- Instruksi lama untuk mengurangi spasi saat terjadi tumpukan keliru; spasi positif dan envelope baris mencegah tumpukan tanpa mengubah batas jitter awal.
+
+**Konsekuensi**
+- Tinggi baris bisa melebihi 2,4 × x-height untuk teks yang memerlukan envelope lebih tinggi. Nilai awal lainnya tetap dan diuji sebelum perubahan lebih lanjut.
+- Catatan bermargin 20 mm, surat 25 mm; undangan ditolak sesuai D-011. Karakter hilang menjadi placeholder dan daftar pada laporan, tanpa dibuang.
+- Parameter yang dipakai dan hasil 10 seed dicatat pada Uji 3 di `EVALUATION.md`; kemiripan persepsi belum dinyatakan tercapai.

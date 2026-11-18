@@ -4,6 +4,21 @@ Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri t
 
 ## [Unreleased] - 2026-11-19
 
+### Tahap 4: engine render dan verifikasi awal
+- `render_document.py`: tambahkan API/CLI render catatan dan surat, validasi persetujuan/tinjauan/coverage/file, isolasi glyph pengguna, mask tinta dan metrik baseline, pemilihan varian dengan seed, jitter, word wrap termasuk kata panjang, baris kosong, dan pagination.
+- `render_document.py`: tambahkan PDF A4, PNG 300 DPI, watermark wajib setiap halaman, placeholder karakter hilang, garis panduan opsional, laporan JSON tanpa isi teks, format tunggal, dan penolakan folder keluaran lama. Undangan tetap ditunda.
+- `.gitignore`: abaikan `outputs/` untuk melindungi dokumen dan input pribadi.
+- `requirements.txt`: catat empat library stack yang sudah disetujui, termasuk Pillow untuk komposisi PNG; tidak menambah library di luar stack.
+- `tests/test_render.py`: 11 metode uji dengan glyph buatan sementara untuk aturan layout, keamanan bank, determinisme, penanganan karakter hilang, format, dan watermark multipage, tanpa sampel pengguna di repositori.
+- `scripts/evaluate_render.py`: evaluasi 10 seed memakai teks standar, ukur durasi, tumpang tindih kotak, dan variasi lebar; simpan artefak serta statistik tanpa isi teks di folder keluaran lokal.
+- `README.md`: dokumentasikan dependensi, API melalui CLI, syarat bank, folder hasil, laporan, dan perintah pengujian; perbarui status implementasi.
+- `SPEC.md`: perbarui status engine, selaraskan undangan yang ditunda dan watermark terlihat setiap halaman dengan keputusan/kebijakan yang sudah berlaku.
+- `RENDER.md`: dokumentasikan implementasi, mask tinta, pemeriksaan bank, baseline/envelope layout, API/CLI, metadata, dan perlindungan hasil lama; perbaiki aturan spasi saat mencegah tumpang tindih.
+- `DECISIONS.md`: tambahkan D-018 dan D-019 untuk implementasi dan batas layout tanpa mengubah entri lama.
+- `EVALUATION.md`: catat Uji 3, 11 pengujian lulus, pemeriksaan visual PNG/PDF, serta 10 render dengan rata-rata 0,81819 detik/halaman dan 0 kotak bertumpuk. Slash belum tersedia dan dilaporkan sebagai placeholder; uji persepsi/cetak belum dilakukan.
+- Artefak lokal `outputs/`: contoh diary dan laporan, 10 pasangan PDF/PNG evaluasi beserta ringkasan, pratinjau PNG/PDF untuk tinjauan, dan hasil uji CLI bergaris panduan. Sampel dan keluaran pribadi tidak di-commit.
+- `CHANGELOG.md`: catat seluruh perubahan tahap ini dan batas hasil pengujian. Perubahan kode/dokumentasi yang diverifikasi dibuatkan commit sesuai instruksi project.
+
 ### Aturan commit
 - `AGENTS.md`: sesuai instruksi pemilik project, setiap perubahan yang selesai dan diverifikasi wajib di-commit; data pribadi tetap diabaikan Git.
 
