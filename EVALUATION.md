@@ -178,6 +178,13 @@ Isi bagian ini setiap kali ada uji. Jangan menghapus entri lama.
 - Batas lain: belum diuji dengan foto HP cahaya redup/miring, pengguna lain, atau hasil cetak. Tidak ada hasil persepsi atau ketahanan fisik yang direkayasa. Evaluasi teknis awal selesai dan tercatat; evaluasi persepsi serta seluruh target produk belum selesai.
 - Keputusan terkait: D-020.
 
+### Penyesuaian spasi antarkata: 2026-11-19
+- Berdasarkan umpan balik pemilik bahwa spasi terlalu rapat, pengali token spasi dinaikkan dari 2,5 menjadi 3,0 (+20%) sesuai D-021. Pada bank ini: 1,137 menjadi 1,365 mm, bertambah sekitar 0,227 mm per spasi. Jarak antarhuruf dan parameter lain tetap.
+- Bandingkan contoh diary Uji 3 dengan teks dan seed 42 yang sama. Varian tulisan tetap sama; posisi kata dan pemecahan baris mengikuti spasi baru. Perbandingan PNG sudah diperiksa visual.
+- Hasil baru satu halaman PDF/PNG, 165 instance, tanpa karakter hilang; waktu satu render 0,9747 detik. Ini pemeriksaan satu contoh, bukan pengulangan benchmark 10 seed atau uji persepsi manusia.
+- Seluruh 14 pengujian otomatis lulus, termasuk margin, pagination, tumpang tindih, determinisme seed, dan watermark multipage.
+- Hasil lokal disimpan di `outputs/spacing-03/`, termasuk gambar perbandingan berwatermark. Riwayat evaluasi parameter lama tetap dipertahankan.
+
 <!--
 Template entri:
 

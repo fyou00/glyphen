@@ -4,6 +4,15 @@ Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri t
 
 ## [Unreleased] - 2026-11-19
 
+### Pelebaran kecil spasi antarkata (D-021)
+- `render_document.py`: naikkan pengali token spasi dari 2,5 menjadi 3,0 (+20%); parameter antarhuruf dan jitter tetap.
+- `RENDER.md`: selaraskan pengali aktif dan rujukan keputusan.
+- `DECISIONS.md`: tambahkan D-021 berdasarkan umpan balik pemilik tentang spasi yang terlalu rapat.
+- `EVALUATION.md`: catat perbandingan paragraf/seed yang sama dan hasil verifikasi.
+- Verifikasi: 14 pengujian lulus; paragraf seed 42 tetap satu halaman dan 165 instance tanpa karakter hilang. Spasi pada bank ini bertambah sekitar 0,227 mm per token; pratinjau perbandingan diperiksa visual.
+- Artefak lokal `outputs/spacing-03/`: PDF, PNG, laporan, dan gambar perbandingan dengan contoh sebelumnya; tetap diabaikan Git.
+- `CHANGELOG.md`: catat seluruh perubahan penyesuaian ini; perubahan yang diverifikasi dibuatkan commit.
+
 ### Tahap 5: evaluasi teknis awal
 - `scripts/evaluate_segmentation.py`: tambahkan enam lembar audit sumber/crop, template anotasi per kotak, hash bukti berkas, perhitungan ketepatan hanya atas anotasi eksplisit, dan metrik status/kotak kosong setiap label. Gunakan geometri dan inset dari ekstraktor.
 - `scripts/evaluate_render.py`: tambahkan `--repeat` positif untuk beban padat; default tetap teks standar satu kali. Simpan jumlah pengulangan dalam ringkasan baru.

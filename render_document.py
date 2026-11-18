@@ -166,7 +166,7 @@ def layout(text, bank, doc_type, seed=None):
     rng = random.Random(seed)
     missing = set()
     previous = {}
-    space_width = 2.5 * 0.15 * bank.mean_width
+    space_width = 3.0 * 0.15 * bank.mean_width
 
     def token(char):
         if char == ' ':

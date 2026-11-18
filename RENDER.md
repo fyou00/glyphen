@@ -104,7 +104,7 @@ Jitter tidak boleh membuat karakter bertumpuk dengan tetangganya. Penempatan mem
 - Jarak dasar = 0,15 × lebar glyph rata-rata label.
 - Tambahkan variasi acak kecil (±0,3 mm).
 - Jarak minimum 1 piksel sumber (0,1 mm) agar jitter spasi tidak membuat jarak negatif (D-019).
-- Spasi antarkata = 2,5 × jarak dasar.
+- Spasi antarkata = 3,0 × jarak dasar, naik 20% dari nilai awal 2,5 sesuai D-021.
 - Untuk spasi antarkata tetap, jarak dasar memakai rata-rata lebar tinta seluruh label. Setiap varian dan jitter dipilih sekali sebelum word wrap, sehingga ukuran yang dihitung sama dengan yang dirender.
 
 ## Tahap 5: Susun di halaman
@@ -161,7 +161,7 @@ Angka-angka berikut adalah perkiraan awal dan wajib diuji sebelum dianggap baku:
 - Rasio tinggi baris terhadap x-height (2,4).
 - Batas jitter rotasi dan offset.
 - Jarak dasar antarhuruf (0,15).
-- Pengali spasi antarkata (2,5).
+- Pengali spasi antarkata (3,0; penyesuaian awal dari 2,5 sesuai D-021).
 
 Perubahan nilai harus dicatat di `DECISIONS.md`.
 

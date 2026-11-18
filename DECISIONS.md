@@ -370,3 +370,20 @@ Audit segmentasi memakai perbandingan visual kotak sumber dengan crop, anotasi t
 - Tambahkan evaluator segmentasi dan uji penolakan anotasi tidak valid; bukti pribadi tetap lokal dan diabaikan Git.
 - Uji performa tetap 10 seed teks standar, ditambah opsi pengulangan untuk beban padat/multihalaman tanpa mengganti teks standar asli. Durasi per halaman adalah durasi dokumen dibagi jumlah halaman; bukan waktu tiap halaman secara terpisah.
 - Tidak mengubah parameter segmentasi/render atau geometri. Uji persepsi belum dijalankan: tidak membuat skor manusia atau menggandakan dua baris pangram menjadi 20 referensi independen. Watermark tetap wajib; pilihan protokol penilaian yang sesuai masih memerlukan keputusan pemilik project.
+
+---
+
+## D-021: Sedikit melebarkan spasi antarkata
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif; menggantikan pengali spasi kata pada D-009 dan D-019
+
+**Keputusan**
+Naikkan pengali spasi antarkata dari 2,5 menjadi 3,0 kali jarak dasar, yaitu kenaikan 20% pada token spasi. Pada bank yang sedang diuji, token spasi bertambah dari sekitar 1,137 menjadi 1,365 mm. Jarak antarhuruf, ukuran tulisan, jitter, dan margin tetap.
+
+**Alasan**
+- Pemilik menilai hasil render terlalu rapat dan meminta sedikit pelebaran spasi.
+
+**Konsekuensi**
+- Word wrap dapat berubah karena kata-kata memerlukan ruang lebih lebar. Bandingkan paragraf dan seed yang sama dengan hasil sebelumnya, lalu jalankan kembali pengujian renderer.
+- Ini penyesuaian berdasarkan umpan balik pemilik; belum merupakan hasil uji persepsi banyak penilai. Hasil benchmark lama tetap menjadi riwayat parameter sebelumnya.
