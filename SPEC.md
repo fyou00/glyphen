@@ -96,8 +96,11 @@ Sistem menerima sampel tulisan tangan pengguna dari template berlabel, membangun
 - FastAPI dengan editor HTML/CSS/JavaScript lokal, setelah engine render selesai (D-023).
 - Teks maksimal 12.000 karakter, jenis catatan/surat, opsi seed dan garis panduan.
 - Pratinjau A4 per halaman dengan pembesaran; unduh PDF seluruh dokumen atau PNG halaman aktif.
-- ID pemilik dipilih saat menjalankan server; hanya glyph bank yang telah memiliki persetujuan, coverage, serta tinjauan valid yang boleh dipakai.
-- Teks tidak disimpan otomatis di browser atau dicatat ke log; hasil disimpan lokal di folder yang diabaikan Git. Tidak ada upload sampel melalui UI ini atau deployment publik.
+- Profil dapat dibuat melalui nama/alias dan persetujuan tulisan sendiri, kemudian upload JPEG/PNG TPL-01/02/03 dengan opsi rotasi. Batas tiap gambar 10 MiB dan 20 megapiksel; metadata gambar dibuang.
+- ID profil otomatis dan tetap; nama tampilan dapat diedit melalui ikon pensil. Profil dipilih melalui dropdown; `--user` hanya menentukan profil awal opsional. Profil lama tetap dikenali.
+- Hasil ekstraksi harus ditinjau pada tiga gambar debug dan setiap varian touches_edge sebelum coverage dihitung. Hanya profil dengan tinjauan valid dan minimal 3 varian untuk seluruh huruf yang dapat dirender. Coverage kurang melaporkan label/halaman yang perlu diulang, tanpa menyalin varian.
+- Ikon keranjang sampah membuka konfirmasi penghapusan profil, sampel, glyph, arsip, dan turunan lokal yang teridentifikasi. Tidak menghapus profil lain; salinan di luar penyimpanan terkelola perlu dihapus pemilik sendiri (D-024).
+- Teks tidak disimpan otomatis di browser atau dicatat ke log; sumber dan hasil disimpan lokal di folder yang diabaikan Git. Tidak ada upload sampel ke layanan lain atau deployment publik.
 
 ## 9. Batasan dan keamanan
 

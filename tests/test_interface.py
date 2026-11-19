@@ -97,6 +97,15 @@ class InterfaceTests(unittest.TestCase):
         for path in a['png_urls']:
             self.assertEqual(self.client.get(path).status_code, 200)
 
+    def test_legacy_profile_rename_preserves_id_and_glyphs(self):
+        before = (self.folder/'manifest.json').read_bytes()
+        response = self.client.patch('/api/profiles/demo', json={'display_name': 'Nama tampilan baru'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['display_name'], 'Nama tampilan baru')
+        self.assertEqual(response.json()['user_id'], 'demo')
+        self.assertTrue(response.json()['ready'])
+        self.assertEqual((self.folder/'manifest.json').read_bytes(), before)
+
 
 if __name__ == '__main__':
     unittest.main()

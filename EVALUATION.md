@@ -196,6 +196,13 @@ Isi bagian ini setiap kali ada uji. Jangan menghapus entri lama.
 - Berkas, log, dan screenshot QA berada lokal di `outputs/ui-checks/`; hasil dokumen di `outputs/ui/`. Keduanya diabaikan Git. Tidak ada sampel atau teks yang diunggah ke layanan lain, tidak ada publikasi situs, dan belum dilakukan pengujian perangkat ponsel fisik atau penilaian manusia.
 - Batas aplikasi: satu pemilik pada loopback, belum memiliki upload/onboarding sampel, autentikasi multi-pengguna, atau penyimpanan draft. Ini tidak menyelesaikan uji persepsi yang tertunda pada tahap sebelumnya.
 
+### Uji 6: pengelolaan profil lokal, 2026-11-19
+- Implementasikan D-024: tambah profil dari nama/alias dan tiga gambar, ubah nama melalui pensil, serta hapus melalui keranjang sampah. Tidak mengubah geometri atau parameter render.
+- Seluruh 26 metode unittest lulus, termasuk profil lama, consent wajib sebelum upload dan pada upload ulang, rotasi/metadata gambar, halaman duplikat/tidak valid, gerbang tinjauan debug, penerimaan potongan touches_edge, coverage kurang dan pengulangan halaman, render setelah siap, serta penghapusan hasil sendiri dengan mempertahankan hasil profil lain.
+- Uji browser headless memakai tiga halaman sintetis bertanda marker dan isian buatan; TPL-01 sengaja diputar 180°. Alur tambah → koreksi rotasi → ekstraksi → konfirmasi tiga debug → coverage/aktif → ubah nama dengan ID tetap → render/unduh PDF → hapus berhasil. Akses profil dan unduhan yang telah dihapus mengembalikan 404 sesuai harapan. Profil nyata k1ndtomato tetap ada; profil QA dibersihkan.
+- Dialog tambah diperiksa pada desktop 1440 × 1000 dan ponsel 390 × 844; tidak ada overflow horizontal pada pemeriksaan ponsel. File input terkunci sampai identitas dan persetujuan diisi; ikon pensil dan keranjang sampah tersedia. Artefak QA tersimpan lokal di `outputs/ui-checks/` dan diabaikan Git.
+- Ini uji fungsional dengan data sintetis, bukan pengukuran baru ketepatan segmentasi foto nyata, benchmark render, atau penilaian persepsi manusia. Gate desain Uji 5 tetap sebagai riwayat; tidak diklaim lulus kembali. Server lokal lama perlu dimulai ulang untuk memuat API profil baru.
+
 <!--
 Template entri:
 

@@ -153,6 +153,14 @@ Aturan dari `AGENTS.md`: jika coverage kurang, minta pengguna mengulang halaman 
 | Banyak kotak `empty` | Minta pengguna mengulang halaman |
 | Banyak kotak `touches_edge` | Tinjau manual, pertimbangkan tulis ulang |
 
+## Integrasi profil melalui antarmuka
+
+`profiles.py` memakai `process_page()` yang sama dengan CLI setelah identitas dan persetujuan pemilik tersimpan. Tiga JPEG/PNG diurutkan secara eksplisit sebagai TPL-01/02/03, dinormalisasi ke RGB tanpa metadata, diputar sesuai pilihan, dan disimpan bersama hasil percobaan dalam folder profil pribadi. Geometri dan ambang klasifikasi tidak berubah.
+
+Ekstraksi menghasilkan manifest, status/kotak kosong tiap label, dan tiga debug dengan `visual_review.passed: false`. Pemilik harus memeriksa ketiga halaman dan menerima setiap varian tepi. Potongan salah menghentikan proses sebelum coverage. Setelah tinjauan lolos, hitung `coverage.json` dan periksa lagi dengan engine; jika huruf kurang dari 3 varian, profil tetap belum siap serta menampilkan halaman yang perlu diulang. Upload ulang mengganti hasil aktif setelah seluruh halaman berhasil, tanpa mencampur varian lama; setiap percobaan tetap tersimpan untuk keterlacakan dan ikut dihapus bersama profil.
+
+Evaluator segmentasi mengenali `source_root: profile` pada consent baru; metadata lama tetap memakai `scan_demo/`. Semua jalur sumber harus berada dalam root yang sesuai. Gambar yang diupload dalam slot halaman salah belum dikenali lewat OCR: pemilik wajib memastikan urutan dan label saat meninjau.
+
 ## Batasan saat ini
 
 - Pencahayaan kuat atau bayangan dapat membuat kotak kosong palsu. Ambang tinta bisa disesuaikan jika perlu.

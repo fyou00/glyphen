@@ -59,8 +59,9 @@ def evaluate(user, out, bank_root, scan_root, review_path=None):
         raise ValueError('Folder audit sudah ada; gunakan folder baru.')
     sources, hashes = {}, {}
     for n in (1, 2, 3):
-        path = (scan_root/consent['pages'][n-1]['processed']).resolve()
-        if not path.is_relative_to(scan_root.resolve()):
+        source_root = folder if consent.get('source_root') == 'profile' else scan_root
+        path = (source_root/consent['pages'][n-1]['processed']).resolve()
+        if not path.is_relative_to(source_root.resolve()):
             raise ValueError('Lokasi scan keluar folder sumber.')
         sources[n] = path
         hashes[str(n)] = digest(path)

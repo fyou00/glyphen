@@ -6,9 +6,11 @@ let busy = false;
 let result = null;
 let currentPage = 0;
 let renderedInput = '';
+let selectedUserId = null;
+let profileBusy = false;
 
 function inputSignature() {
-  return JSON.stringify({text:text.value, doc_type:form.elements.doc_type.value,
+  return JSON.stringify({user_id:selectedUserId, text:text.value, doc_type:form.elements.doc_type.value,
     seed:$('seed').value === '' ? null : Number($('seed').value), guidelines:$('guidelines').checked});
 }
 function setDownload(link, url) {
@@ -18,7 +20,7 @@ function setDownload(link, url) {
 }
 function updateInputs() {
   $('character-count').textContent = `${Array.from(text.value).length.toLocaleString('id-ID')} / 12.000`;
-  $('render').disabled = busy || !profileReady || !text.value.trim();
+  $('render').disabled = busy || profileBusy || !profileReady || !text.value.trim();
   const stale = result && inputSignature() !== renderedInput;
   if (stale && !busy) {
     $('result-status').textContent = 'Ada perubahan pada catatan';
@@ -46,6 +48,7 @@ function showPage(page) {
 }
 function setBusy(value) {
   busy = value;
+  window.ProfileUI.setRenderBusy(value);
   $('loading').hidden = !value;
   $('preview-panel').setAttribute('aria-busy', String(value));
   $('render-label').textContent = value ? 'Menyusun tulisan…' : 'Buat tulisan tangan';
@@ -56,7 +59,7 @@ function setBusy(value) {
 }
 async function generate(event) {
   event?.preventDefault();
-  if (busy || !profileReady || !text.value.trim() || !form.reportValidity()) return;
+  if (busy || profileBusy || !profileReady || !text.value.trim() || !form.reportValidity()) return;
   $('form-error').hidden = true;
   const signature = inputSignature();
   setBusy(true);
@@ -93,21 +96,23 @@ $('zoom').addEventListener('click', () => {
   $('zoom').setAttribute('aria-label', zoomed ? 'Pas halaman' : 'Perbesar pratinjau');
   $('zoom').textContent = zoomed ? '−' : '＋';
 });
-document.addEventListener('keydown', (event) => {if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {event.preventDefault();generate();}});
+document.addEventListener('keydown', (event) => {if (!document.querySelector('dialog[open]') && (event.metaKey || event.ctrlKey) && event.key === 'Enter') {event.preventDefault();generate();}});
+document.addEventListener('profile-busy',event=>{profileBusy=event.detail;updateInputs();});
 for (const id of ['download-pdf','download-png']) $(id).addEventListener('click', event => {if ($(id).getAttribute('aria-disabled') === 'true') event.preventDefault();});
-$('preview-image').addEventListener('error', () => {$('form-error').textContent='Gambar pratinjau belum bisa dimuat. Coba buat ulang dokumen.';$('form-error').hidden=false;});
+$('preview-image').addEventListener('error', () => {if($('preview-image').hidden)return;$('form-error').textContent='Gambar pratinjau belum bisa dimuat. Coba buat ulang dokumen.';$('form-error').hidden=false;});
 async function boot() {
   updateInputs();
   try {
-    const response = await fetch('/api/profile');
-    if (!response.ok) throw new Error('Profil belum bisa dimuat. Pastikan aplikasi lokal masih berjalan.');
-    const profile = await response.json();
-    $('profile-id').textContent = profile.user_id;
-    profileReady = profile.ready;
-    $('profile-state').textContent = profile.ready ? 'Siap dipakai' : 'Perlu diperiksa';
-    $('profile-state').classList.toggle('unready',!profile.ready);
-    if (!profile.ready) throw new Error(profile.detail);
-    await generate();
+    await window.ProfileUI.init(async(profile, initial)=>{
+      const changed=selectedUserId!==(profile?.user_id||null);
+      selectedUserId=profile?.user_id||null;profileReady=!!profile?.ready;
+      $('profile-id').textContent=selectedUserId||'';
+      $('profile-state').textContent=profileReady?'Siap dipakai':profile?'Belum siap':'Belum ada';
+      $('profile-state').classList.toggle('unready',!profileReady);
+      if(changed){result=null;currentPage=0;$('preview-image').hidden=true;$('preview-image').removeAttribute('src');$('preview-placeholder').hidden=false;$('missing-warning').hidden=true;$('page-counter').textContent='1 / 1';$('previous').disabled=true;$('next').disabled=true;}
+      if(!result){$('result-status').textContent=profileReady?'Siap membuat catatan':'Profil belum siap';$('result-detail').textContent=profile?.detail||'Tambahkan profil atau periksa sampelnya terlebih dahulu.';$('preview-placeholder').querySelector('p').textContent=profileReady?'Buat tulisan untuk melihat pratinjau.':'Tambahkan profil dan periksa sampel untuk mulai menulis.';}
+      updateInputs();if(initial&&profileReady)await generate();
+    });
   } catch (error) {
     $('form-error').textContent = error instanceof TypeError ? 'Profil belum bisa dimuat. Pastikan aplikasi lokal masih berjalan.' : error.message;
     $('form-error').hidden = false;

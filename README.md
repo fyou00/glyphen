@@ -32,6 +32,7 @@ Sistem yang membuat dokumen (catatan, surat, undangan) dengan tulisan tangan dar
 | `scripts/evaluate_segmentation.py` | Audit sumber/crop, anotasi per kotak, dan metrik segmentasi |
 | `requirements.txt` | Dependensi Python |
 | `app.py`, `web/` | Antarmuka editor dan pratinjau lokal |
+| `profiles.py` | Profil, upload TPL, tinjauan, coverage, dan penghapusan turunan |
 | `docs/INTERFACE.md` | Perilaku dan verifikasi antarmuka |
 
 ## Persiapan
@@ -79,12 +80,16 @@ Karakter yang belum tersedia menjadi placeholder dan tercatat dalam laporan. Sel
 ### 4. Buka antarmuka lokal
 
 ```bash
-python app.py --user <id> --port 8010
+python app.py --port 8010
 ```
 
 Buka `http://127.0.0.1:8010/`. Tulis atau tempel teks, pilih catatan/surat, lalu klik **Buat tulisan tangan** (Cmd/Ctrl+Enter). Periksa pratinjau per halaman, perbesar bila perlu, lalu unduh PDF seluruh dokumen atau PNG halaman aktif. Seed dan garis panduan tersedia pada pengaturan tulisan.
 
-Antarmuka memuat contoh catatan netral dan membuat pratinjau awal secara lokal. Teks yang diubah belum disimpan atau dirender sampai tombol ditekan lagi; hasil lama ditandai perlu diperbarui. Hasil berada di `outputs/ui/` yang diabaikan Git. Tidak ada upload sampel atau autosave teks di browser. Profil pemilik ditentukan melalui `--user` saat memulai server. Lihat `docs/INTERFACE.md`.
+Klik **Tambah profil**, isi nama/alias pemilik dan persetujuan, lalu pilih tiga gambar TPL-01/02/03. Gunakan rotasi jika gambar terbalik. Setelah ekstraksi, periksa ketiga debug dan setiap potongan bertanda tepi. Coverage diperiksa setelah tinjauan lolos; profil belum bisa dirender jika ada huruf dengan kurang dari 3 varian. Halaman dan label yang perlu diulang akan dilaporkan, dan upload ulang tersedia.
+
+Pilih profil melalui dropdown. Tombol **pensil** mengubah nama tampilan tanpa mengganti ID atau glyph; tombol **keranjang sampah** menghapus profil dan data lokal terkait setelah konfirmasi. Berkas yang sudah diunduh ke luar penyimpanan proyek perlu dihapus sendiri. Parameter opsional `--user <id>` tetap dapat memilih profil awal; bank lama langsung dikenali.
+
+Antarmuka memuat contoh catatan netral dan membuat pratinjau lokal jika profil awal sudah siap. Teks yang diubah belum disimpan atau dirender sampai tombol ditekan lagi; hasil lama ditandai perlu diperbarui. Hasil berada di `outputs/ui/` yang diabaikan Git, dan sampel profil baru berada di dalam `glyph_bank/<id>/sources/`. Identitas/persetujuan disimpan di JSON, metadata gambar dibuang, serta tidak ada unggahan ke layanan lain atau autosave teks di browser. Lihat `docs/INTERFACE.md`. Setelah memperbarui kode backend, restart server sebelum memuat ulang halaman.
 
 ### Pengujian
 
@@ -110,7 +115,7 @@ Audit menghasilkan enam lembar perbandingan kotak sumber dengan crop dan `review
 ## Yang belum ada
 
 - Uji persepsi kemiripan tulisan dan uji cetak hasil render.
-- Antarmuka pengumpulan sampel dan persetujuan untuk pengguna baru; UI saat ini memakai glyph bank yang sudah siap.
+- Autentikasi akun dan hosting publik; aplikasi saat ini dikelola lokal di satu perangkat.
 - Pengujian foto HP dengan variasi cahaya dan perspektif. Ekstraksi pada scan tulisan nyata sudah diuji; coverage dan hasil tinjauan tercatat di `EVALUATION.md`.
 
 ## Catatan untuk kontributor

@@ -4,6 +4,17 @@ Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri t
 
 ## [Unreleased] - 2026-11-19
 
+### Tambah, ubah nama, dan hapus profil (D-024)
+- `profiles.py`: tambahkan profil dengan ID tetap dan nama/alias, JSON persetujuan, ekstraksi tiga halaman, tinjauan debug serta setiap `touches_edge`, validasi coverage, upload ulang profil belum siap, dan penghapusan sumber/hasil terkelola berdasarkan metadata pemilik. Simpan percobaan ekstraksi untuk keterlacakan; pisahkan hasil pemilik lain saat menghapus direktori bersama.
+- `app.py`: tambahkan API daftar/buat/ubah/hapus profil, upload JPEG/PNG beserta rotasi, tinjauan, dan gambar debug/glyph. Konfirmasi kepemilikan wajib pada setiap upload. Batasi ukuran request/gambar, buang metadata gambar, ratakan transparansi ke putih, tolak halaman duplikat, dan serialkan mutasi dengan render. Profil dipilih eksplisit per request; startup tidak lagi mewajibkan `--user`.
+- `web/index.html`, `web/profiles.js`, `web/app.js`, `web/styles.css`: tambahkan pemilih profil, tombol tambah, ikon pensil untuk nama, ikon keranjang sampah dengan konfirmasi, dialog persetujuan/upload tiga TPL dengan pratinjau/rotasi, pemeriksaan debug dan potongan tepi, laporan coverage serta upload ulang. Tambahkan label aksesibel, fokus/dialog keyboard, tampilan ponsel, dan status sibuk; hasil lama dinonaktifkan saat berpindah profil.
+- `requirements.txt`: tambahkan python-multipart untuk upload lokal, dicatat terlebih dahulu dalam D-024. `scripts/evaluate_segmentation.py`: dukung sumber foto di dalam profil dengan pemeriksaan batas path.
+- `tests/test_profiles.py`, `tests/test_interface.py`: tambah uji lifecycle profil, profil lama, identitas/persetujuan termasuk upload ulang, gerbang tinjauan/coverage, gambar/rotasi/metadata, kegagalan ekstraksi, isolasi penghapusan dan hasil turunan. Seluruh 26 metode pengujian lulus.
+- `README.md`, `SPEC.md`, `PIPELINE.md`, `docs/INTERFACE.md`: dokumentasikan alur profil, API, batas upload, sumber lokal, serta cakupan hapus dan identitas tetap. `DECISIONS.md`: catat D-024; `EVALUATION.md`: catat Uji 6.
+- Tambahkan metadata pemilik JSON pada sumber/artefak lama yang kepemilikannya diketahui di `scan_demo/` dan subfolder `outputs/`, agar penghapusan dapat ditelusuri; seluruhnya tetap lokal dan diabaikan Git. Profil tulisan nyata tidak diubah atau dihapus.
+- Verifikasi browser dengan gambar sintetis mencakup tambah profil, putar TPL-01, tinjau tiga halaman, aktivasi, edit nama, render/unduh, dan hapus beserta hasilnya. Tampilan dialog diperiksa pada desktop dan ponsel 390 piksel. Tidak mengklaim uji persepsi tulisan atau gate desain baru lulus.
+- `CHANGELOG.md`: catat perubahan ini. Geometri template, watermark, dan parameter render tetap.
+
 ### Antarmuka editor lokal (D-023)
 - `app.py`: tambahkan server FastAPI pada loopback, profil pemilik tetap, validasi input hingga 12.000 karakter, antrean render, dan rute unduhan yang hanya melayani berkas hasil terdaftar. Host/Origin diverifikasi; respons pribadi tidak di-cache, sumber halaman dibatasi CSP, dan log akses tidak diaktifkan.
 - `web/index.html`, `web/styles.css`, `web/app.js`, `web/favicon.svg`: buat ruang kerja editor/pratinjau A4, profil siap pakai, pilihan catatan/surat, teks awal netral, counter karakter, seed, garis panduan, indikator proses, peringatan karakter hilang, navigasi halaman, pembesaran, unduhan PDF/PNG, Cmd/Ctrl+Enter, dan penanda hasil usang. Tambahkan layout responsif, fokus keyboard, kontrol radio terlihat, serta reduced motion.

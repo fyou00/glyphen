@@ -10,14 +10,17 @@ Copy menggunakan Bahasa Indonesia langsung: label menyebut isi, tombol menyebut 
 
 ```bash
 python -m pip install -r requirements.txt
-python app.py --user <id> --port 8010
+python app.py --port 8010
 ```
 
 Buka `http://127.0.0.1:8010/`. Untuk pengujian, pasang `requirements-dev.txt`, lalu jalankan `python -m unittest discover -s tests -v`.
 
 ## Perilaku
 
-- Profil dipilih melalui `--user` saat server dimulai. Tidak ada pemilihan bank orang lain atau upload sampel melalui UI ini.
+- Profil dipilih dari dropdown. `--user <id>` tetap tersedia sebagai pilihan profil awal opsional; tanpa profil, tombol Tambah profil tetap dapat digunakan. Bank lama dikenali tanpa memindahkan glyph.
+- Tambah profil menyimpan nama/alias dan persetujuan tulisan sendiri di JSON sebelum menerima tiga JPEG/PNG TPL-01/02/03. Setiap gambar maksimal 10 MiB/20 megapiksel, dapat diputar 0/90/180/270° searah jarum jam. Orientasi EXIF dinormalisasi dan metadata gambar dibuang; sumber disimpan sebagai PNG RGB dalam folder profil.
+- Setelah ekstraksi, pemilik wajib memeriksa tiga debug dan menerima setiap potongan touches_edge. Tinjauan salah menghentikan proses; coverage baru dihitung setelah tinjauan lolos. Jika huruf kurang dari 3 varian, label/halaman dilaporkan dan tiga gambar dapat diupload ulang. Halaman lain boleh menggunakan scan sebelumnya; tidak ada penggandaan varian untuk mengisi kekurangan.
+- Ikon pensil mengedit nama tampilan, sementara ID dan identitas persetujuan awal tetap. Ikon keranjang sampah meminta konfirmasi sebelum menghapus profil beserta sumber, percobaan, glyph, arsip, dan hasil lokal yang terkait. Pemilik lain tidak dihapus. Unduhan di luar penyimpanan proyek perlu dihapus sendiri.
 - Profil harus memiliki persetujuan, coverage, dan tinjauan glyph yang valid. Jika belum siap, tombol render dinonaktifkan.
 - Halaman awal berisi teks netral dan membuat pratinjau lokal melalui API render. Pengguna dapat mengosongkan teks atau menggantinya. Batas isi 12.000 karakter.
 - Pilihan catatan/surat mengikuti margin engine. Opsi seed dapat dikosongkan untuk variasi acak; garis panduan hanya aktif untuk catatan.
@@ -31,17 +34,25 @@ Buka `http://127.0.0.1:8010/`. Untuk pengujian, pasang `requirements-dev.txt`, l
 | Metode / rute | Fungsi |
 |---|---|
 | `GET /` | Editor lokal |
-| `GET /api/profile` | Kesiapan profil tanpa mengirim pernyataan persetujuan atau path pribadi |
-| `POST /api/render` | Body JSON `text`, `doc_type`, `seed`, `guidelines`; hasil berupa tautan PDF/PNG serta statistik |
+| `GET /api/profile?user_id=…` | Kesiapan profil pilihan atau profil awal, tanpa mengirim pernyataan persetujuan atau path pribadi |
+| `GET/POST /api/profiles` | Daftar profil dan pilihan awal / buat profil dengan `display_name`, `consent: true` |
+| `GET/PATCH/DELETE /api/profiles/{id}` | Detail / ubah `display_name` / hapus dengan `confirm: true` |
+| `POST /api/profiles/{id}/samples` | Multipart `tpl01`, `tpl02`, `tpl03`, `rotation1/2/3`, dan `owner_confirmation=true` pada setiap upload untuk profil yang belum siap |
+| `POST /api/profiles/{id}/review` | `crops_correct`, tiga `pages_checked`, dan `accepted_edges` per label/varian; aktifkan hanya setelah coverage valid |
+| `GET /api/profiles/{id}/debug/{page}` | Gambar debug halaman 1/2/3 untuk tinjauan |
+| `GET /api/profiles/{id}/glyph/{label}/{variant}` | Potongan glyph terdaftar untuk tinjauan tepi |
+| `POST /api/render` | Body JSON `user_id`, `text`, `doc_type`, `seed`, `guidelines`; hasil berupa tautan PDF/PNG serta statistik. ID eksplisit dari UI, fallback profil awal untuk klien lama. |
 | `GET /api/renders/{id}/{filename}` | Berkas hasil yang terdaftar; `?download=true` untuk lampiran |
 
-Server hanya mendengarkan loopback. Host lokal dan Origin diperiksa; tidak membuka CORS untuk situs lain. Header CSP membatasi sumber ke aplikasi sendiri, dan respons pribadi memakai `Cache-Control: no-store`. Nama/path bebas dan akses manifest/consent melalui rute unduhan ditolak. Ini aplikasi lokal satu pemilik, tanpa autentikasi multi-pengguna atau deployment publik.
+Server hanya mendengarkan loopback. Host lokal dan Origin diperiksa; tidak membuka CORS untuk situs lain. Header CSP membatasi sumber ke aplikasi sendiri, dengan `blob:` hanya untuk pratinjau file lokal sebelum upload; respons pribadi memakai `Cache-Control: no-store`. Nama/path bebas dan akses manifest/consent melalui rute unduhan ditolak. Ini aplikasi lokal yang dapat mengelola beberapa profil/alias tulisan sendiri, tanpa autentikasi akun atau deployment publik.
+
+Sumber percobaan berada dalam `glyph_bank/<id>/sources/`. Penghapusan juga mengenali `glyph_bank/history/<id>/`, `render_report.json` milik profil, serta direktori sumber/artefak yang memiliki metadata pemilik (`owner.json` atau metadata terkait). Direktori campuran tidak menghapus dokumen pemilik lain; berkas milik pemilik yang dihapus dibersihkan sesuai marker. Salinan lama yang tidak memiliki metadata kepemilikan perlu diidentifikasi terlebih dahulu; tidak menebak berdasarkan kemiripan gambar. Artefak sesi awal yang diketahui milik profil lama diberi marker lokal, tanpa mengubah gambar atau menghapus data saat pemasangan fitur.
 
 ## Verifikasi
 
-Lima metode uji API memakai bank buatan sementara: halaman/profil, render serta berkas unduhan, validasi input/Origin/Host, bank yang belum siap, dan dokumen multipage dengan hasil terisolasi. Pengujian renderer dan audit sebelumnya tetap dijalankan. Bukti pemeriksaan browser serta pratinjau disimpan lokal dalam `outputs/ui-checks/`; hasil pemeriksaan akhir dicatat di `EVALUATION.md`.
+Pengujian API memakai bank buatan sementara, termasuk bank lama, render/unduhan, validasi input/Origin/Host, profil baru, persetujuan, rotasi, pembuangan EXIF, gambar invalid/besar/duplikat, tinjauan yang belum lengkap, coverage kurang, upload ulang, rename tanpa perubahan ID, serta penghapusan sumber/arsip/turunan dengan isolasi pemilik lain. Pengujian renderer dan audit sebelumnya tetap dijalankan. Uji browser memakai halaman buatan untuk alur tambah–tinjau–aktifkan–rename–render–hapus; bukan sampel orang lain atau penilaian persepsi. Bukti pemeriksaan serta pratinjau disimpan lokal dalam `outputs/ui-checks/`; hasilnya dicatat di `EVALUATION.md`.
 
-### Laporan pemeriksa desain
+### Riwayat pemeriksa desain antarmuka awal (D-023)
 
 `GATE: OPEN 15 (rounds used up)` — gate desain belum lulus. Pemeriksa ini ditujukan untuk landing page satu section per layar; aplikasi ini merupakan editor dua panel yang dapat digulir. Tidak menyatakan seluruh pemeriksaan visual lulus.
 

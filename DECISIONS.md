@@ -423,3 +423,28 @@ Bangun antarmuka HTML/CSS/JavaScript lokal dengan FastAPI dan Uvicorn, menghubun
 - Render JSON dibatasi 12.000 karakter dan dijalankan bergantian. Unduhan hanya boleh mengakses file hasil yang terdaftar pada render tersebut, tanpa menerima path berkas bebas. Origin/Host lokal diverifikasi dan cache respons pribadi dinonaktifkan.
 - Halaman memakai aset lokal, label Bahasa Indonesia, navigasi keyboard, indikator proses, pesan karakter hilang, dan penanda saat hasil perlu diperbarui setelah teks berubah. Watermark wajib tetap ada; tidak ada opsi menghapusnya.
 - Aturan render dan geometri template tidak berubah. Teks awal adalah contoh catatan netral yang bisa diganti atau dikosongkan; pratinjau awal dirender lokal melalui API yang sama.
+
+---
+
+## D-024: Pembuatan dan pengelolaan profil lokal
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif; memperluas pemilihan profil tetap pada D-023
+
+**Keputusan**
+Tambahkan profil bernama/alias dengan ID otomatis tetap. Identitas dan persetujuan tulisan sendiri wajib disimpan dalam JSON sebelum menerima tiga gambar TPL-01/02/03. Gambar JPEG/PNG maksimal 10 MiB dan 20 megapiksel per halaman, dapat diputar kelipatan 90°; metadata gambar dibuang. Tambahkan python-multipart untuk upload lokal. Tidak ada geometri, model ML, atau parameter render yang diubah.
+
+Setelah ekstraksi, pemilik wajib memeriksa tiga gambar debug dan setiap varian touches_edge. Coverage baru dihitung setelah tinjauan lolos. Profil diaktifkan hanya jika setiap huruf memiliki minimal 3 varian dan validasi engine lulus; jika kurang, laporkan label serta halaman yang perlu diulang. Tinjauan gagal tidak diteruskan ke coverage/render. Upload ulang tiga halaman tersedia pada profil yang belum siap.
+
+**Alasan**
+- Pengguna meminta tambah profil dengan nama dan tiga gambar, edit nama melalui ikon pensil, serta hapus melalui ikon keranjang sampah.
+- Pengumpulan data harus mempertahankan urutan ekstraksi, tinjauan, coverage, dan render yang dapat ditelusuri.
+
+**Konsekuensi**
+- Nama tampilan dapat diubah tanpa mengubah ID atau kepemilikan glyph. Pemilihan ID eksplisit per request mencegah tab browser menggunakan profil yang berbeda tanpa sengaja.
+- Profil lama tetap dapat dipilih tanpa migrasi glyph; nama awal memakai ID sampai diedit. Antarmuka tetap lokal tanpa autentikasi akun atau upload atas nama orang lain.
+- Penghapusan memerlukan konfirmasi dan membersihkan folder profil, arsip profil, sumber serta turunan lokal yang dapat diidentifikasi melalui metadata pemilik. Berkas bersama yang mencantumkan pemilik terhapus ikut dibersihkan; file profil lain tidak disentuh. Salinan yang telah diunduh ke luar penyimpanan terkelola perlu dihapus pengguna sendiri.
+- Semua sumber dan hasil baru disimpan di folder pribadi yang diabaikan Git. Percobaan upload ulang tetap disimpan di dalam profil untuk keterlacakan, dan ikut dihapus bersama profil. Render, ekstraksi, dan mutasi profil dijalankan bergantian.
+
+**Penegasan implementasi D-024**
+- Setiap upload ulang juga memerlukan konfirmasi eksplisit bahwa ketiga gambar merupakan tulisan pemilik yang sama; identitas dan persetujuan awal tetap disimpan sebagai riwayat JSON.
