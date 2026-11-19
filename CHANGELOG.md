@@ -4,6 +4,10 @@ Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri t
 
 ## [Unreleased] - 2026-11-19
 
+### Kontras persetujuan pemilik tulisan
+- `web/index.html` dan `web/styles.css` menampilkan persetujuan dalam kotak hijau muda dengan teks gelap, judul tebal, area klik penuh, dan penanda fokus keyboard.
+- Uji browser pada lebar 390 piksel memastikan klik judul mencentang persetujuan dan membuka pilihan file setelah nama diisi. Dialog tidak melebar ke samping.
+
 ### Tombol rotasi sampel dua arah (D-025)
 - `web/index.html`: ganti dropdown rotasi di TPL-01/02/03 dengan tombol panah berlawanan/searah jarum jam, label aksesibel per halaman, dan indikator sudut.
 - `web/profiles.js`: putar 90° per klik, normalisasi sudut ke 0/90/180/270°, perbarui pratinjau/indikator, reset saat dialog dibuka ulang, serta kunci tombol tanpa gambar/persetujuan atau selama pemrosesan. Upload tetap mengirim nilai rotasi melalui API yang sama.

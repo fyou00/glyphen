@@ -73,7 +73,13 @@ Tidak semua hari perlu terasa istimewa. Kadang, mencatatnya saja sudah cukup.</t
     <div id="profile-error" class="message error" role="alert" hidden></div>
     <form id="profile-upload-form">
       <label for="owner-name" class="dialog-label">Nama / alias pemilik</label><input id="owner-name" maxlength="80" required autocomplete="off" placeholder="Nama yang ditampilkan di pilihan profil">
-      <label class="consent-row"><input id="owner-consent" type="checkbox" required><span>Saya pemilik tulisan pada ketiga gambar dan menyetujui pemrosesannya untuk glyph bank pribadi serta dokumen berpenanda “TIDAK RESMI - HASIL GENERASI”.</span></label>
+      <label class="consent-row owner-consent-card">
+        <input id="owner-consent" type="checkbox" aria-labelledby="owner-consent-statement" required>
+        <span>
+          <strong>Persetujuan pemilik tulisan</strong>
+          <span id="owner-consent-statement">Saya pemilik tulisan pada ketiga gambar dan menyetujui pemrosesannya untuk glyph bank pribadi serta dokumen berpenanda “TIDAK RESMI - HASIL GENERASI”.</span>
+        </span>
+      </label>
       <p class="field-hint">Nama dan persetujuan disimpan di JSON terpisah. Pilih tiga halaman berbeda, dengan keempat marker terlihat. JPEG/PNG, maksimal 10 MiB dan 20 megapiksel per gambar.</p>
       <div class="sample-grid">
         <div class="sample-card"><label for="sample-1">TPL-01 · Huruf kecil</label><input id="sample-1" type="file" accept="image/jpeg,image/png" required disabled><span class="sample-preview"><img id="sample-preview-1" alt="Gambar TPL-01 yang dipilih" hidden><span id="sample-hint-1">Pilih gambar halaman 1</span></span><div class="rotation-controls" role="group" aria-label="Rotasi TPL-01"><button type="button" id="rotate-left-1" class="icon-button" aria-label="Putar TPL-01 berlawanan arah jarum jam 90°" title="Putar berlawanan arah jarum jam 90°" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 1 1 1 8M3 4v6h6"/></svg></button><input type="hidden" id="rotation-1" value="0"><output id="rotation-angle-1" aria-live="polite" aria-label="Sudut rotasi TPL-01">0°</output><button type="button" id="rotate-right-1" class="icon-button" aria-label="Putar TPL-01 searah jarum jam 90°" title="Putar searah jarum jam 90°" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10a9 9 0 1 0-1 8M21 4v6h-6"/></svg></button></div></div>
