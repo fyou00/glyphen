@@ -4,6 +4,13 @@ Format: setiap entri memuat tanggal, perubahan, dan file yang terdampak. Entri t
 
 ## [Unreleased] - 2026-11-19
 
+### Tombol rotasi sampel dua arah (D-025)
+- `web/index.html`: ganti dropdown rotasi di TPL-01/02/03 dengan tombol panah berlawanan/searah jarum jam, label aksesibel per halaman, dan indikator sudut.
+- `web/profiles.js`: putar 90° per klik, normalisasi sudut ke 0/90/180/270°, perbarui pratinjau/indikator, reset saat dialog dibuka ulang, serta kunci tombol tanpa gambar/persetujuan atau selama pemrosesan. Upload tetap mengirim nilai rotasi melalui API yang sama.
+- `web/styles.css`: susun tombol dan indikator dalam satu baris, dengan target sentuh 44 × 44 piksel. `docs/INTERFACE.md` dan `DECISIONS.md`: dokumentasikan kontrol dan D-025 tanpa mengubah keputusan lama.
+- Verifikasi JavaScript dan diff lulus. Browser menguji kedua arah dan satu putaran penuh pada ketiga slot, pratinjau/sudut, serta alur upload dengan koreksi 180° hingga review, render, dan pembersihan profil QA sintetis. Pemeriksaan ponsel 390 piksel memverifikasi enam tombol, target sentuh, status terkunci awal, dan dialog tanpa overflow. Artefak QA berada di `outputs/ui-checks/` dan diabaikan Git.
+- `CHANGELOG.md`: catat seluruh perubahan ini; geometri, ekstraksi, dan parameter render tetap.
+
 ### Tambah, ubah nama, dan hapus profil (D-024)
 - `profiles.py`: tambahkan profil dengan ID tetap dan nama/alias, JSON persetujuan, ekstraksi tiga halaman, tinjauan debug serta setiap `touches_edge`, validasi coverage, upload ulang profil belum siap, dan penghapusan sumber/hasil terkelola berdasarkan metadata pemilik. Simpan percobaan ekstraksi untuk keterlacakan; pisahkan hasil pemilik lain saat menghapus direktori bersama.
 - `app.py`: tambahkan API daftar/buat/ubah/hapus profil, upload JPEG/PNG beserta rotasi, tinjauan, dan gambar debug/glyph. Konfirmasi kepemilikan wajib pada setiap upload. Batasi ukuran request/gambar, buang metadata gambar, ratakan transparansi ke putih, tolak halaman duplikat, dan serialkan mutasi dengan render. Profil dipilih eksplisit per request; startup tidak lagi mewajibkan `--user`.

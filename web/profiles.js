@@ -43,17 +43,24 @@ window.ProfileUI = (() => {
   function stage(name) {
     el('profile-upload-form').hidden=name!=='upload';el('profile-review-form').hidden=name!=='review';el('profile-result').hidden=name!=='result';
   }
+  function setRotation(page,angle) {
+    const normalized=(angle+360)%360;
+    el(`rotation-${page}`).value=String(normalized);
+    el(`rotation-angle-${page}`).textContent=`${normalized}°`;
+    el(`sample-preview-${page}`).className=`rotate-${normalized}`;
+  }
   function clearFiles() {
     for(let n=1;n<=3;n++) {
       if(blobs.has(n)) URL.revokeObjectURL(blobs.get(n));blobs.delete(n);
-      el(`sample-${n}`).value='';el(`rotation-${n}`).value='0';
+      el(`sample-${n}`).value='';setRotation(n,0);
       el(`sample-preview-${n}`).hidden=true;el(`sample-preview-${n}`).className='';el(`sample-hint-${n}`).hidden=false;
     }
   }
   function allowUploads() {
     const enabled=el('owner-name').value.trim()&&el('owner-consent').checked;
     for(let n=1;n<=3;n++) el(`sample-${n}`).disabled=!enabled||working;
-    for(let n=1;n<=3;n++) el(`rotation-${n}`).disabled=working;
+    for(let n=1;n<=3;n++) for(const direction of ['left','right'])
+      el(`rotate-${direction}-${n}`).disabled=working||!enabled||!el(`sample-${n}`).files.length;
   }
   function uploadStage(existing=null) {
     stage('upload');clearFiles();draftId=existing?.user_id||null;
@@ -122,8 +129,12 @@ window.ProfileUI = (() => {
         if(blobs.has(n))URL.revokeObjectURL(blobs.get(n));const file=el(`sample-${n}`).files[0];
         const preview=el(`sample-preview-${n}`);preview.hidden=!file;el(`sample-hint-${n}`).hidden=!!file;
         if(file){const url=URL.createObjectURL(file);blobs.set(n,url);preview.src=url;}
+        allowUploads();
       });
-      el(`rotation-${n}`).addEventListener('change',()=>el(`sample-preview-${n}`).className=`rotate-${el(`rotation-${n}`).value}`);
+      for(const [direction,step] of [['left',-90],['right',90]])
+        el(`rotate-${direction}-${n}`).addEventListener('click',()=>{
+          if(!working&&!el(`rotate-${direction}-${n}`).disabled) setRotation(n,Number(el(`rotation-${n}`).value)+step);
+        });
     }
     el('profile-upload-form').addEventListener('submit',async event=>{
       event.preventDefault();if(working)return;el('profile-error').hidden=true;

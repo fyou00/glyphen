@@ -448,3 +448,10 @@ Setelah ekstraksi, pemilik wajib memeriksa tiga gambar debug dan setiap varian t
 
 **Penegasan implementasi D-024**
 - Setiap upload ulang juga memerlukan konfirmasi eksplisit bahwa ketiga gambar merupakan tulisan pemilik yang sama; identitas dan persetujuan awal tetap disimpan sebagai riwayat JSON.
+
+## D-025: Tombol rotasi sampel dua arah
+
+- **Tanggal**: 2026-11-19
+- **Status**: aktif
+- **Keputusan**: sesuai permintaan pengguna, ganti dropdown rotasi dengan tombol panah berlawanan dan searah jarum jam, 90° setiap klik. Tampilkan sudut dan perbarui pratinjau langsung; normalisasi ke 0/90/180/270° untuk API yang sama. Tombol memakai nama aksesibel per halaman dan terkunci tanpa gambar atau saat sibuk.
+- **Konsekuensi**: tidak ada perubahan ekstraksi, geometri, atau parameter render.
